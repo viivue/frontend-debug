@@ -18,7 +18,10 @@
                 {
                     slug: 'scroll-amount',
                     label: 'Scroll amount: [value]',
-                    value: () => this.round(this.scroll().top)
+                    value: () => {
+                        const direction = this.lastScrollPosition > this.scroll().top ? '⏫' : '⏬';
+                        return this.round(this.scroll().top) + ' ' + direction;
+                    }
                 },
                 {
                     separator: true,
@@ -83,6 +86,7 @@
             for(const item of this.stats){
                 this.debugContainer.find(`[data-fe-debug="${item.slug}"]`).html(item.label.replace('[value]', item.value()));
             }
+
 
             this.lastScrollPosition = this.scroll().top;
         }
