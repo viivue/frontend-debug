@@ -6,6 +6,7 @@
             if(!this.validate()) return false;
 
             // data
+            this.version = '0.0.1';
             this.lastScrollPosition = this.scroll().top;
             this.maxSpeed = 0;
             this.lastSpeed = 0;
@@ -125,7 +126,7 @@
         }
 
         generateHTML(){
-            $('body').prepend('<div id="fe-debug"></div>');
+            $('body').prepend(`<div id="fe-debug"><div class="head"><span>Debug UI v${this.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
             this.debugContainer = $('#fe-debug');
 
             // append stats
@@ -133,17 +134,13 @@
                 const $stats = this.debugContainer.find(`[data-fe-debug="${item.slug}"]`);
                 if(!$stats.length){
                     // append new
-                    this.debugContainer.append(`<div data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`);
+                    this.debugContainer.append(`<div style="display:none" data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`);
                     const $item = this.debugContainer.find(`[data-fe-debug="${item.slug}"]`);
 
                     // apply styling
                     if(typeof item.separator === 'boolean' && item.separator === true){
                         // separator with border top
-                        $item.css({
-                            borderTop: '1px solid rgba(255,255,255,0.3)',
-                            paddingTop: '3px',
-                            marginTop: '3px'
-                        });
+                        $item.addClass('sep');
                     }
                 }
             }
@@ -157,9 +154,54 @@
                 backgroundColor: 'rgba(0,0,0,0.7)',
                 color: 'white',
                 fontSize: '12px',
-                padding: '10px',
                 borderRadius: '0 10px 0 0',
                 backdropFilter: 'blur(5px)',
+                overflow: 'hidden',
+                minWidth: '175px'
+            });
+            this.debugContainer.find('.head').css({
+                padding: '3px 10px',
+                backgroundColor: 'rgba(0,0,0,0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+            });
+            this.debugContainer.find('[data-fe-debug]').css({padding: '0 10px'});
+            this.debugContainer.find('.head + [data-fe-debug]').css({paddingTop: '5px'});
+            this.debugContainer.find('[data-fe-debug]:last-child').css({paddingBottom: '5px'});
+            this.debugContainer.find('.sep').css({
+                borderTop: '1px solid rgba(255,255,255,0.15)',
+                paddingTop: '5px',
+                marginTop: '5px'
+            });
+            const $closeButton = this.debugContainer.find('.head button');
+            $closeButton.css({
+                backgroundColor: 'rgba(0,0,0,0)',
+                color: '#fff',
+                marginLeft: '10px',
+                padding: '3px',
+            });
+
+            // dialog open
+            const toggleDialog = () => {
+                if(this.isDialogOpen === true || this.isDialogOpen === 'true'){
+                    this.debugContainer.find('[data-fe-debug]').show();
+                    $closeButton.text('🔻');
+                }else{
+                    this.debugContainer.find('[data-fe-debug]').hide();
+                    $closeButton.text('🔺');
+                }
+                sessionStorage.setItem("FrontEndDebugOpen", this.isDialogOpen);
+            }
+
+            // on init
+            this.isDialogOpen = sessionStorage.getItem("FrontEndDebugOpen") === null ? true : sessionStorage.getItem("FrontEndDebugOpen");
+            toggleDialog();
+
+            // on toggle
+            $closeButton.on('click', () => {
+                this.isDialogOpen = !this.isDialogOpen;
+                toggleDialog();
             });
         }
 
