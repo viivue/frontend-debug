@@ -16,11 +16,12 @@
 
             this.stats = [
                 {
-                    slug: 'scroll-amount',
-                    label: 'Scroll amount: [value]',
+                    slug: 'scroll',
+                    label: 'Scroll: [value]',
                     value: () => {
                         const direction = this.lastScrollPosition > this.scroll().top ? '⏫' : '⏬';
-                        return this.round(this.scroll().top) + ' ' + direction;
+                        const progress = this.scroll().top / (document.body.clientHeight - this.viewport().h);
+                        return `${this.round(this.scroll().top)} ${direction} ${this.round(progress)}`;
                     }
                 },
                 {
