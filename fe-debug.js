@@ -15,6 +15,8 @@
             this.lastSpeedTotal = 0;
 
             this.memory = {};
+            this.indicateTime = parseInt(this.getUrlParam('debug')) || parseInt(sessionStorage.getItem("FrontEndDebugIndicateTime")) || 500;
+            sessionStorage.setItem("FrontEndDebugIndicateTime", this.indicateTime);
 
             this.stats = [
                 {
@@ -174,7 +176,7 @@
                 return false;
             }
 
-            const isDebug = this.getUrlParam('debug') !== -1;
+            const isDebug = this.getUrlParam('debug') !== null;
             const notInit = !this.debugContainer.length;
             const isPassed = isDebug && notInit;
 
