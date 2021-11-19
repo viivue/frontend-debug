@@ -133,7 +133,7 @@
          */
         validate(){
             // stop debug
-            const isStopDebug = window.location.search.indexOf('stopdebug') !== -1;
+            const isStopDebug = window.location.search.indexOf('nodebug') !== -1;
             if(isStopDebug){
                 sessionStorage.removeItem("FrontEndDebug");
                 return false;
@@ -158,7 +158,7 @@
                 if(typeof sessionStorage.getItem("FrontEndDebug") === 'string'){
                     // but has session
                     if(sessionStorage.getItem("FrontEndDebug") === 'on'){
-                        console.warn('FrontEndDebug enabled via session storage. Close tab or add ?stopdebug to clear session.');
+                        console.warn('FrontEndDebug enabled via session storage. Close tab or add ?nodebug to clear session.');
                         return true;
                     }
                 }
