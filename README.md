@@ -1,10 +1,10 @@
-# 🐛 frontend-debug
+# 🐛 frontend-debug [![Netlify Status](https://api.netlify.com/api/v1/badges/2eb250dd-cab2-4e06-8996-df32cf606042/deploy-status)](https://app.netlify.com/sites/fdebug/deploys)
 Debug tool for front-end dev
 
 Inject this script tag into `footer.php`
 
 ```html
-<script src="https://viivue.mochisandbox.com/demo/fe-debug/fe-debug.js"></script>
+<script src="https://fdebug.netlify.app/script.js"></script>
 ```
 
 ## Show debug
