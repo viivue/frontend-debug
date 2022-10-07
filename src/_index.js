@@ -1,5 +1,4 @@
-import {uniqueId} from "@/utils";
-
+import {setCSS, uniqueId} from "@/utils";
 
 /**
  * Private class
@@ -7,7 +6,7 @@ import {uniqueId} from "@/utils";
 class FrontEndDebug{
     constructor(){
         // validate
-        this.debugContainer = $('#fe-debug');
+        this.debugContainer = document.querySelectorAll('#fe-debug');
         if(!this.validate()) return false;
 
         // data
@@ -89,7 +88,7 @@ class FrontEndDebug{
         const onUpdate = () => {
             this.updateStats();
             window.requestAnimationFrame(onUpdate);
-        }
+        };
         window.requestAnimationFrame(onUpdate);
     }
 
@@ -124,34 +123,39 @@ class FrontEndDebug{
     updateStats(){
         // loop through all stats
         for(const item of this.stats){
-            this.debugContainer.find(`[data-fe-debug="${item.slug}"]`).html(item.label.replace('[value]', item.value()));
+            this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`).forEach(node => {
+                node.innerHTML = item.label.replace('[value]', item.value());
+            });
         }
 
         this.lastScrollPosition = this.scroll().top;
     }
 
     generateHTML(){
-        $('body').prepend(`<div id="fe-debug"><div class="head"><span>Debug UI v${this.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
-        this.debugContainer = $('#fe-debug');
+        document.querySelector('body').insertAdjacentHTML('beforeend',
+            `<div id="fe-debug"><div class="head"><span>Debug UI v${this.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
+        this.debugContainer = document.querySelector('#fe-debug');
 
         // append stats
         for(const item of this.stats){
-            const $stats = this.debugContainer.find(`[data-fe-debug="${item.slug}"]`);
+            const $stats = this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`);
             if(!$stats.length){
                 // append new
-                this.debugContainer.append(`<div style="display:none" data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`);
-                const $item = this.debugContainer.find(`[data-fe-debug="${item.slug}"]`);
+                this.debugContainer.insertAdjacentHTML('beforeend',
+                    `<div style="display:none" data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`
+                );
+                const $item = this.debugContainer.querySelector(`[data-fe-debug="${item.slug}"]`);
 
                 // apply styling
                 if(typeof item.separator === 'boolean' && item.separator === true){
                     // separator with border top
-                    $item.addClass('sep');
+                    $item.classList.add('sep');
                 }
             }
         }
 
         // apply styling
-        this.debugContainer.css({
+        setCSS(this.debugContainer, {
             position: 'fixed',
             bottom: '0',
             left: '0',
@@ -164,50 +168,64 @@ class FrontEndDebug{
             overflow: 'hidden',
             minWidth: '175px'
         });
-        this.debugContainer.find('.head').css({
-            padding: '3px 10px',
-            backgroundColor: 'rgba(0,0,0,0.1)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
+        this.debugContainer.querySelectorAll('.head').forEach(node => {
+            setCSS(node, {
+                padding: '3px 10px',
+                backgroundColor: 'rgba(0,0,0,0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+            });
         });
-        this.debugContainer.find('[data-fe-debug]').css({padding: '0 10px'});
-        this.debugContainer.find('.head + [data-fe-debug]').css({paddingTop: '5px'});
-        this.debugContainer.find('[data-fe-debug]:last-child').css({paddingBottom: '5px'});
-        this.debugContainer.find('.sep').css({
-            borderTop: '1px solid rgba(255,255,255,0.15)',
-            paddingTop: '5px',
-            marginTop: '5px'
+        this.debugContainer.querySelectorAll('[data-fe-debug]').forEach(node => {
+            setCSS(node, {padding: '0 10px'});
         });
-        const $closeButton = this.debugContainer.find('.head button');
-        $closeButton.css({
-            backgroundColor: 'rgba(0,0,0,0)',
-            color: '#fff',
-            marginLeft: '10px',
-            padding: '3px',
+        this.debugContainer.querySelectorAll('.head + [data-fe-debug]').forEach(node => {
+            setCSS(node, {paddingTop: '5px'});
         });
+        this.debugContainer.querySelectorAll('[data-fe-debug]:last-child').forEach(node => {
+            setCSS(node, {paddingBottom: '5px'});
+        });
+        this.debugContainer.querySelectorAll('.sep').forEach(node => {
+            setCSS(node, {
+                borderTop: '1px solid rgba(255,255,255,0.15)',
+                paddingTop: '5px',
+                marginTop: '5px'
+            });
+        });
+
+        const closeButton = this.debugContainer.querySelectorAll('.head button');
+        closeButton.forEach(node => {
+            setCSS(node, {
+                backgroundColor: 'rgba(0,0,0,0)',
+                color: '#fff',
+                marginLeft: '10px',
+                padding: '3px',
+            });
+        });
+
 
         // dialog open
         const toggleDialog = () => {
             if(this.isDialogOpen === true || this.isDialogOpen === 'true'){
-                this.debugContainer.find('[data-fe-debug]').show();
-                $closeButton.text('🔻');
+                this.debugContainer.querySelectorAll('[data-fe-debug]').forEach(node => setCSS(node, {display: 'block',}));
+                closeButton.textContent = '🔻';
             }else{
-                this.debugContainer.find('[data-fe-debug]').hide();
-                $closeButton.text('🔺');
+                this.debugContainer.querySelectorAll('[data-fe-debug]').forEach(node => setCSS(node, {display: 'none',}));
+                closeButton.textContent = '🔺';
             }
             sessionStorage.setItem("FrontEndDebugOpen", this.isDialogOpen);
-        }
+        };
 
         // on init
         this.isDialogOpen = sessionStorage.getItem("FrontEndDebugOpen") === null ? true : sessionStorage.getItem("FrontEndDebugOpen");
         toggleDialog();
 
         // on toggle
-        $closeButton.on('click', () => {
+        closeButton.forEach(node => node.addEventListener('click', () => {
             this.isDialogOpen = !this.isDialogOpen;
             toggleDialog();
-        });
+        }));
     }
 
 
@@ -222,7 +240,6 @@ class FrontEndDebug{
             sessionStorage.removeItem("FrontEndDebug");
             return false;
         }
-
         const isDebug = this.getUrlParam('debug') !== null;
         const notInit = !this.debugContainer.length;
         const isPassed = isDebug && notInit;
