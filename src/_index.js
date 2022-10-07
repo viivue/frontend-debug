@@ -1,4 +1,5 @@
 import {getUrlParam, scroll, round, setCSS, uniqueId, viewport, append} from "@/utils";
+import {format, time} from "@/time";
 
 /**
  * Private class
@@ -78,6 +79,11 @@ class FrontEndDebug{
                 slug: 'document',
                 label: 'Document: [value]',
                 value: () => `${this.indicate(document.body.clientWidth, 'clientWidth')}/${this.indicate(document.body.clientHeight, 'clientHeight')}`
+            },
+            {
+                slug: 'time',
+                label: 'Uptime: [value]',
+                value: () => `${format(time)}`,
             }
         ];
 
