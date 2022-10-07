@@ -150,7 +150,7 @@ class FrontEndDebug{
             const stats = this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`);
             if(!stats.length){
                 // append new
-                append(this.debugContainer, `<div style="display:none" data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`)
+                append(this.debugContainer, `<div style="display:none" data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`);
                 const itemEl = this.debugContainer.querySelector(`[data-fe-debug="${item.slug}"]`);
 
                 // apply styling
