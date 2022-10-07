@@ -18,3 +18,6 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
+img, h1, p:not(:last-child) {margin-bottom:25px;}
+img {margin-left:auto; margin-right:auto; display:block; max-width:100%;}
