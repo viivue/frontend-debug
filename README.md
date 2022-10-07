@@ -45,3 +45,29 @@ Or just close the current tab.
 - The script will generate some HTML for the debug UI.
 - Calculate values using requestAnimationFrame.
 - Show/hide debug UI with session storage.
+
+## Deployment
+
+Run `./web` in live server
+
+```shell
+npm run dev
+```
+
+Build files from `./src` to `./dist`
+
+```shell
+npm run prod
+```
+
+Build sources from `./web` to `./build`
+
+```shell
+npm run build
+```
+
+Build files from `./src` to `./dist` then publish to `npm`
+
+```shell
+npm run publish
+```
