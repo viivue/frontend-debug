@@ -106,7 +106,7 @@ export const scroll = () => {
         left: (window.pageXOffset || document.documentElement.scrollLeft) - (document.documentElement.clientLeft || 0),
         top: (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0)
     };
-}
+};
 
 /**
  * Viewport size
@@ -117,11 +117,11 @@ export const viewport = () => {
         w: (window.innerWidth || document.documentElement.clientWidth),
         h: (window.innerHeight || document.documentElement.clientHeight)
     };
-}
+};
 
 export const round = (number = 0, fractionDigits = 2) => {
     return parseFloat(number.toFixed(fractionDigits));
-}
+};
 
 /**
  * Get parameter from URL
@@ -131,4 +131,14 @@ export const round = (number = 0, fractionDigits = 2) => {
  */
 export const getUrlParam = (param, url = window.location.href) => {
     return new URL(url).searchParams.get(param);
-}
+};
+
+/**
+ * Append HTML
+ * @param element
+ * @param html
+ * @returns {*}
+ */
+export const append = (element, html) => {
+    element.insertAdjacentHTML('beforeend', html);
+};

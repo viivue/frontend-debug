@@ -1,4 +1,4 @@
-import {getUrlParam, scroll, round, setCSS, uniqueId, viewport} from "@/utils";
+import {getUrlParam, scroll, round, setCSS, uniqueId, viewport, append} from "@/utils";
 
 /**
  * Private class
@@ -142,8 +142,7 @@ class FrontEndDebug{
      * Generate FE Debug HTML
      */
     generateHTML(){
-        document.querySelector('body').insertAdjacentHTML('beforeend',
-            `<div id="fe-debug"><div class="head"><span>Debug UI v${this.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
+        append(document.querySelector('body'), `<div id="fe-debug"><div class="head"><span>Debug UI v${this.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
         this.debugContainer = document.querySelector('#fe-debug');
 
         // append stats
@@ -151,9 +150,7 @@ class FrontEndDebug{
             const stats = this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`);
             if(!stats.length){
                 // append new
-                this.debugContainer.insertAdjacentHTML('beforeend',
-                    `<div style="display:none" data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`
-                );
+                append(this.debugContainer, `<div style="display:none" data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`)
                 const itemEl = this.debugContainer.querySelector(`[data-fe-debug="${item.slug}"]`);
 
                 // apply styling
