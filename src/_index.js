@@ -1,5 +1,5 @@
 import {getUrlParam, scroll, round, setCSS, uniqueId, viewport, append} from "@/utils";
-import {format, time} from "@/time";
+import {format, time} from "@/upTime";
 
 /**
  * Private class
@@ -246,7 +246,7 @@ class FrontEndDebug{
      * Validate before init
      * If the param is 'nodebug' => not show the debug.
      * If the param is 'debug' => show debug
-     * and the next time access the page (without closing the current page), we don't need the param anymore to show the FE Debug
+     * and the next upTime access the page (without closing the current page), we don't need the param anymore to show the FE Debug
      * @returns {boolean}
      */
     validate(){
