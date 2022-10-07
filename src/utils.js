@@ -95,3 +95,40 @@ export function uniqueId(prefix = ''){
     return prefix + (+new Date()).toString(16) +
         (Math.random() * 100000000 | 0).toString(16);
 }
+
+
+/**
+ * Scroll position
+ * @returns {{top: number, left: number}}
+ */
+export const scroll = () => {
+    return {
+        left: (window.pageXOffset || document.documentElement.scrollLeft) - (document.documentElement.clientLeft || 0),
+        top: (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0)
+    };
+}
+
+/**
+ * Viewport size
+ * @returns {{w: number, h: number}}
+ */
+export const viewport = () => {
+    return {
+        w: (window.innerWidth || document.documentElement.clientWidth),
+        h: (window.innerHeight || document.documentElement.clientHeight)
+    };
+}
+
+export const round = (number = 0, fractionDigits = 2) => {
+    return parseFloat(number.toFixed(fractionDigits));
+}
+
+/**
+ * Get parameter from URL
+ * @param param
+ * @param url
+ * @returns {*}
+ */
+export const getUrlParam = (param, url = window.location.href) => {
+    return new URL(url).searchParams.get(param);
+}

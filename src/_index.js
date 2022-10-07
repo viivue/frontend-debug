@@ -1,4 +1,4 @@
-import {setCSS, uniqueId} from "@/utils";
+import {getUrlParam, scroll, round, setCSS, uniqueId, viewport} from "@/utils";
 
 /**
  * Private class
@@ -11,7 +11,7 @@ class FrontEndDebug{
 
         // data
         this.version = '0.0.1';
-        this.lastScrollPosition = this.scroll().top;
+        this.lastScrollPosition = scroll().top;
         this.maxSpeed = 0;
         this.lastSpeed = 0;
         this.averageSpeed = 0;
@@ -20,7 +20,7 @@ class FrontEndDebug{
         this.lastSpeedTotal = 0;
 
         this.memory = {};
-        this.indicateTime = parseInt(this.getUrlParam('debug')) || parseInt(sessionStorage.getItem("FrontEndDebugIndicateTime")) || 500;
+        this.indicateTime = parseInt(getUrlParam('debug')) || parseInt(sessionStorage.getItem("FrontEndDebugIndicateTime")) || 500;
         sessionStorage.setItem("FrontEndDebugIndicateTime", this.indicateTime);
 
         this.stats = [
@@ -28,9 +28,9 @@ class FrontEndDebug{
                 slug: 'scroll',
                 label: 'Scroll: [value]',
                 value: () => {
-                    const direction = this.lastScrollPosition > this.scroll().top ? '⏫' : '⏬';
-                    const progress = this.round(this.scroll().top / (document.body.clientHeight - this.viewport().h), 3);
-                    return `${this.indicate(this.round(this.scroll().top), 'scrollAmount')} ${direction} ${this.indicate(progress, 'progress')}`;
+                    const direction = this.lastScrollPosition > scroll().top ? '⏫' : '⏬';
+                    const progress = round(scroll().top / (document.body.clientHeight - viewport().h), 3);
+                    return `${this.indicate(round(scroll().top), 'scrollAmount')} ${direction} ${this.indicate(progress, 'progress')}`;
                 }
             },
             {
@@ -38,13 +38,13 @@ class FrontEndDebug{
                 slug: 'speed',
                 label: 'Speed: [value]',
                 value: () => {
-                    this.lastSpeed = Math.abs(this.lastScrollPosition - this.scroll().top);
+                    this.lastSpeed = Math.abs(this.lastScrollPosition - scroll().top);
 
                     // for avg. speed
                     this.lastSpeedCount++;
                     this.lastSpeedTotal += this.lastSpeed;
 
-                    return this.indicate(this.round(this.lastSpeed), 'lastSpeed');
+                    return this.indicate(round(this.lastSpeed), 'lastSpeed');
                 }
             },
             {
@@ -52,11 +52,11 @@ class FrontEndDebug{
                 label: 'Avg. speed: [value]',
                 value: () => {
                     // only update if changes
-                    if(this.lastScrollPosition !== this.scroll().top){
+                    if(this.lastScrollPosition !== scroll().top){
                         this.averageSpeed = this.lastSpeedTotal / this.lastSpeedCount;
                     }
 
-                    return this.indicate(this.round(this.averageSpeed), 'averageSpeed');
+                    return this.indicate(round(this.averageSpeed), 'averageSpeed');
                 }
             },
             {
@@ -64,14 +64,14 @@ class FrontEndDebug{
                 label: 'Max speed: [value]',
                 value: () => {
                     this.maxSpeed = Math.max(this.maxSpeed, this.lastSpeed);
-                    return this.indicate(this.round(this.maxSpeed), 'maxSpeed');
+                    return this.indicate(round(this.maxSpeed), 'maxSpeed');
                 }
             },
             {
                 separator: true,
                 slug: 'viewport',
                 label: 'Viewport: [value]',
-                value: () => `${this.indicate(this.viewport().w, 'viewportWidth')}/${this.indicate(this.viewport().h, 'viewportHeight')}`
+                value: () => `${this.indicate(viewport().w, 'viewportWidth')}/${this.indicate(viewport().h, 'viewportHeight')}`
             },
 
             {
@@ -92,6 +92,10 @@ class FrontEndDebug{
         window.requestAnimationFrame(onUpdate);
     }
 
+    /**
+     * Indicate
+     * Detect and return old/new value between each frame reset (rAF)
+     */
     indicate(value, key){
         const newValue = value => `<span style="color:#96cdff">${value}</span>`;
 
@@ -120,6 +124,9 @@ class FrontEndDebug{
         return newValue(value);
     }
 
+    /**
+     * Update stats of each value when frame reset
+     */
     updateStats(){
         // loop through all stats
         for(const item of this.stats){
@@ -128,9 +135,12 @@ class FrontEndDebug{
             });
         }
 
-        this.lastScrollPosition = this.scroll().top;
+        this.lastScrollPosition = scroll().top;
     }
 
+    /**
+     * Generate FE Debug HTML
+     */
     generateHTML(){
         document.querySelector('body').insertAdjacentHTML('beforeend',
             `<div id="fe-debug"><div class="head"><span>Debug UI v${this.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
@@ -231,16 +241,20 @@ class FrontEndDebug{
 
     /**
      * Validate before init
+     * If the param is 'nodebug' => not show the debug.
+     * If the param is 'debug' => show debug
+     * and the next time access the page (without closing the current page), we don't need the param anymore to show the FE Debug
      * @returns {boolean}
      */
     validate(){
-        // stop debug
-        const isStopDebug = this.getUrlParam('nodebug') !== null;
+        // stop debug when the param is 'nodebug'
+        const isStopDebug = getUrlParam('nodebug') !== null;
         if(isStopDebug){
             sessionStorage.removeItem("FrontEndDebug");
             return false;
         }
-        const isDebug = this.getUrlParam('debug') !== null;
+
+        const isDebug = getUrlParam('debug') !== null;
         const notInit = !this.debugContainer.length;
         const isPassed = isDebug && notInit;
 
@@ -266,42 +280,6 @@ class FrontEndDebug{
         }
 
         return false;
-    }
-
-    /**
-     * Scroll position
-     * @returns {{top: number, left: number}}
-     */
-    scroll(){
-        return {
-            left: (window.pageXOffset || document.documentElement.scrollLeft) - (document.documentElement.clientLeft || 0),
-            top: (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0)
-        };
-    }
-
-    /**
-     * Viewport size
-     * @returns {{w: number, h: number}}
-     */
-    viewport(){
-        return {
-            w: (window.innerWidth || document.documentElement.clientWidth),
-            h: (window.innerHeight || document.documentElement.clientHeight)
-        };
-    }
-
-    round(number = 0, fractionDigits = 2){
-        return parseFloat(number.toFixed(fractionDigits));
-    }
-
-    /**
-     * Get parameter from URL
-     * @param param
-     * @param url
-     * @returns {*}
-     */
-    getUrlParam(param, url = window.location.href){
-        return new URL(url).searchParams.get(param);
     }
 }
 
