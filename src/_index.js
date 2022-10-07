@@ -138,18 +138,18 @@ class FrontEndDebug{
 
         // append stats
         for(const item of this.stats){
-            const $stats = this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`);
-            if(!$stats.length){
+            const stats = this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`);
+            if(!stats.length){
                 // append new
                 this.debugContainer.insertAdjacentHTML('beforeend',
                     `<div style="display:none" data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`
                 );
-                const $item = this.debugContainer.querySelector(`[data-fe-debug="${item.slug}"]`);
+                const itemEl = this.debugContainer.querySelector(`[data-fe-debug="${item.slug}"]`);
 
                 // apply styling
                 if(typeof item.separator === 'boolean' && item.separator === true){
                     // separator with border top
-                    $item.classList.add('sep');
+                    itemEl.classList.add('sep');
                 }
             }
         }
@@ -344,5 +344,3 @@ window.FrontendDebug = {
     // Get instance object by ID
     get: id => window.FrontendDebugController.get(id)
 };
-
-window.FrontendDebug.init();
