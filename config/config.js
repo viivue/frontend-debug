@@ -26,6 +26,9 @@ const paths = { // Source files
     // Production build files
     dist: path.resolve(__dirname, '../dist'),
 
+    // Root directory, this is for backward compatibility, not a good practice though
+    root: path.resolve(__dirname, '../'),
+
     // Web resources
     web: path.resolve(__dirname, '../web'),
 
