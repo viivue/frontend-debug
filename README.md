@@ -58,7 +58,7 @@ Build files from `./src` to `./dist`
 npm run prod
 ```
 
-Build sources from `./web` to `./build`
+Build sources from `./web` to `./build`, also generate a `script.js` into `./build` for public access to the script file.
 
 ```shell
 npm run build
