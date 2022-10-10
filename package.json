@@ -23,9 +23,10 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js & npm run build-umd",
     "build-umd": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js",
+    "build-netlify": "cross-env NODE_ENV=production webpack --config config/webpack.netlify.js",
     "build-module": "cross-env NODE_ENV=production webpack --config config/webpack.module.js",
     "prod": "cross-env NODE_ENV=production npm run build-umd",
-    "build": "cross-env NODE_ENV=production webpack --config config/webpack.web.js",
+    "build": "cross-env NODE_ENV=production webpack --config config/webpack.web.js && npm run build-netlify",
     "publish": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js & npm publish"
   },
   "devDependencies": {
