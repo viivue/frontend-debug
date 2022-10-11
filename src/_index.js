@@ -1,4 +1,4 @@
-import {getUrlParam, scroll, round, setCSS, uniqueId, viewport, append} from "@/utils";
+import {getUrlParam, scroll, round, setCSS, viewport, append} from "./utils";
 import {format} from "@/upTime";
 
 /**
@@ -11,7 +11,7 @@ class FrontEndDebug{
         if(!this.validate()) return false;
 
         // data
-        this.version = '0.0.1';
+        this.version = '0.0.2';
         this.lastScrollPosition = scroll().top;
         this.maxSpeed = 0;
         this.lastSpeed = 0;
@@ -286,42 +286,4 @@ class FrontEndDebug{
     }
 }
 
-
-/**
- * Private class Controller
- * This class will hold instances of the library's objects
- */
-class Controller{
-    constructor(){
-        this.instances = [];
-    }
-
-    add(slider){
-        this.instances.push(slider);
-    }
-
-    get(id){
-        return this.instances.filter(instance => instance.id === id)[0];
-    }
-}
-
-
-/**
- * Public library data
- * access via window.FrontendDebugController
- */
-window.FrontendDebugController = new Controller();
-
-
-/**
- * Public library object
- * access via window.FrontendDebug
- */
-window.FrontendDebug = {
-    // init new instances
-    init: (options = {}) => {
-        new FrontEndDebug();
-    },
-    // Get instance object by ID
-    get: id => window.FrontendDebugController.get(id)
-};
+window.FrontEndDebug = new FrontEndDebug();

@@ -1,41 +1,39 @@
-# 🐛 Frontend-debug [![Netlify Status](https://api.netlify.com/api/v1/badges/2eb250dd-cab2-4e06-8996-df32cf606042/deploy-status)](https://app.netlify.com/sites/fdebug/deploys)
+# 🐛 Frontend-debug
 
-Debug tool for front-end dev
+[![release](https://badgen.net/github/release/viivue/frontend-debug/)](https://github.com/viivue/frontend-debug/releases/latest)
+[![minified](https://badgen.net/badge/minified/6KB/cyan)](https://www.jsdelivr.com/package/gh/viivue/frontend-debug)
+[![jsdelivr](https://data.jsdelivr.com/v1/package/gh/viivue/frontend-debug/badge?style=rounded)](https://www.jsdelivr.com/package/gh/viivue/frontend-debug)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/2eb250dd-cab2-4e06-8996-df32cf606042/deploy-status)](https://app.netlify.com/sites/fdebug/deploys)
+> Debug tool for front-end dev
 
-Inject this script tag into `footer.php`, right above `</body>`
+## Installation
+
+Inject this script tag at the end of your page, right above `</body>`
 
 ```html
-
 <script src="https://fdebug.netlify.app/script.js"></script>
 ```
 
-Or using dev mode with a todo (recommend)
+Or you can download the file and serve it the way you want.
 
-```php
-<?php
-// Front-end debug
-// todo: @your-name remove once done
-if(ev_dev_mode()){
-	echo '<script src="https://fdebug.netlify.app/script.js"></script>';
-} ?>
-```
+## Usage
 
-## Show debug
+### Show debug dialog
 
 Add `?debug` to site URL
 
 ```html
-https://viivue.mochisandbox.com/demo/?debug
+https://fdebug.netlify.app/?debug
 ```
 
 > Once enabled, the debug dialog will remain showing as long as you still stay in the same tab.
 
-## Hide debug
+### Hide debug dialog
 
 Add `?nodebug` to site URL
 
 ```html
-https://viivue.mochisandbox.com/demo/?nodebug
+https://fdebug.netlify.app/?nodebug
 ```
 
 Or just close the current tab.
@@ -44,7 +42,7 @@ Or just close the current tab.
 
 - The script will generate some HTML for the debug UI.
 - Calculate values using requestAnimationFrame.
-- Show/hide debug UI with session storage.
+- Show/hide debug UI with JavaScript session storage.
 
 ## Deployment
 
@@ -60,14 +58,32 @@ Build files from `./src` to `./dist`
 npm run prod
 ```
 
-Build sources from `./web` to `./build`
+Build sources from `./web` to `./build`, also generate a `script.js` into `./build` for public access to the script file.
 
 ```shell
 npm run build
 ```
-
+<!---
 Build files from `./src` to `./dist` then publish to `npm`
 
 ```shell
 npm run publish
 ```
+--->
+
+## Test production output
+
+Generate production output
+
+```shell
+npm run prod
+```
+
+Then load the output script in dev site at `/web/template.html`
+
+```html
+<!-- Test production output -->
+<script src="/script.js"></script>
+```
+
+And remove `import '@/_index'` from `/web/index.js`

@@ -9,8 +9,8 @@ module.exports = {
     devtool: false,
     entry: paths.entry,
     output: {
-        path: paths.dist,
-        filename: `${packageInfo.name}.min.js`,
+        path: paths.build,
+        filename: `script.js`, // this is for backward compatibility, not a good practice though
         library: `${packageInfo.codeName}`,
         libraryTarget: 'umd',
         umdNamedDefine: true,

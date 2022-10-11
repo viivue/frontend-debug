@@ -1,8 +1,8 @@
 {
   "name": "frontend-debug",
   "prettyName": "Front-end Debug",
-  "codeName": "FrontendDebug",
-  "version": "0.0.1",
+  "codeName": "FrontEndDebug",
+  "version": "0.0.2",
   "description": "A boilerplate to build JavaScript library with ES6 module and UMD version.",
   "homepage": "https://github.com/viivue/frontend-debug",
   "repository": {
@@ -21,11 +21,12 @@
   "license": "MIT",
   "main": "./dist/frontend-debug.module.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js",
+    "dev": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js & npm run build-umd",
     "build-umd": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js",
+    "build-netlify": "cross-env NODE_ENV=production webpack --config config/webpack.netlify.js",
     "build-module": "cross-env NODE_ENV=production webpack --config config/webpack.module.js",
-    "prod": "cross-env NODE_ENV=production npm run build-umd & npm run build-module",
-    "build": "cross-env NODE_ENV=production webpack --config config/webpack.web.js",
+    "prod": "cross-env NODE_ENV=production npm run build-umd",
+    "build": "cross-env NODE_ENV=production webpack --config config/webpack.web.js && npm run build-netlify",
     "publish": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js & npm publish"
   },
   "devDependencies": {

@@ -7,6 +7,3 @@ import homeHtml from "./html/home.html";
  */
 const app = document.querySelector('#root')
 app.innerHTML = homeHtml;
-
-// init
-FrontendDebug.init();
