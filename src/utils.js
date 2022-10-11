@@ -142,3 +142,24 @@ export const getUrlParam = (param, url = window.location.href) => {
 export const append = (element, html) => {
     element.insertAdjacentHTML('beforeend', html);
 };
+
+/**
+ * Save data to LocalStorage
+ * @param itemName
+ * @param obj
+ */
+export const saveToLocalStorage = (itemName, obj) => {
+    localStorage.setItem(itemName, JSON.stringify(obj));
+};
+
+/**
+ * Get data from LocalStorage
+ * @param itemName
+ * @param obj
+ * @return object
+ */
+export const getDataFromLocalStorage = (itemName, obj) => {
+    const item = JSON.parse(localStorage.getItem(itemName));
+    if(!item) return null;
+    return item;
+};

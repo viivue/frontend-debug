@@ -1,5 +1,5 @@
 import {getUrlParam, scroll, round, setCSS, uniqueId, viewport, append} from "@/utils";
-import {format, time} from "@/upTime";
+import {format} from "@/upTime";
 
 /**
  * Private class
@@ -83,7 +83,7 @@ class FrontEndDebug{
             {
                 slug: 'time',
                 label: 'Uptime: [value]',
-                value: () => `${format(time)}`,
+                value: () => `${format(Date.now())}`,
             }
         ];
 
