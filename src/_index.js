@@ -1,5 +1,5 @@
 import {getUrlParam, scroll, round, setCSS, viewport, append} from "./utils";
-import {format, getRealTime} from "@/upTime";
+import {getDiffTime, getRealTime} from "./upTime";
 
 /**
  * Private class
@@ -84,7 +84,7 @@ class FrontEndDebug{
                 separator: true,
                 slug: 'time',
                 label: 'Uptime: [value]',
-                value: () => `${format(Date.now())}`,
+                value: () => `${getDiffTime(Date.now())}`,
             },
             {
                 slug: 'on-this-page',
