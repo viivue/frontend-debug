@@ -23,16 +23,17 @@ const getBrowserIp = async() => {
  * @returns {*}
  */
 const getBrowserInformation = async() => {
+    // Get HTML class
+    browserObj.htmlClass = `<button onclick="getElementProperty('html', 'class', alert)">HTML class</button>`;
+
+    // Get Body class
+    browserObj.bodyClass = `<button onclick="getElementProperty('body', 'class', alert)">Body class</button>`;
+
     // Get browser userAgent
     browserObj.userAgent = navigator.userAgent;
 
     // Assign function to window object
     window.getElementProperty = getElementProperty;
-
-    // Get HTML class
-    browserObj.htmlClass = `<button onclick="getElementProperty('html', 'class', alert)">Get</button>`;
-    // Get Body class
-    browserObj.bodyClass = `<button onclick="getElementProperty('body', 'class', alert)">Get</button>`;
 
     // Get browser IP
     const ipObj = await getBrowserIp();

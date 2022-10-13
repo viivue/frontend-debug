@@ -96,15 +96,10 @@ class FrontEndDebug{
             },
             {
                 isNotChange: true,
-                slug: 'html-class',
-                label: 'HTML class: [value]',
-                value: () => `${browserObj.htmlClass}`,
-            },
-            {
-                isNotChange: true,
-                slug: 'body-class',
-                label: 'Body class: [value]',
-                value: () => `${browserObj.bodyClass}`,
+                slug: 'browser-class',
+                label: 'View: [value]',
+                value: () => `${[browserObj.htmlClass, browserObj.bodyClass].join(', ')}`,
+                condition: (value) => value.trim().length > 1,
             },
         ];
 
@@ -157,6 +152,7 @@ class FrontEndDebug{
     updateStats(){
         // loop through all stats
         for(const item of this.stats){
+            const value = item.value();
 
             /* check stat doesn't update if it has finished getting data */
             if (item.isNotChange && item.domValue) {
@@ -164,12 +160,16 @@ class FrontEndDebug{
             }
 
             this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`).forEach(node => {
-                node.innerHTML = item.label.replace('[value]', item.value());
+                node.innerHTML = item.label.replace('[value]', value);
             });
 
             /* enhance stat doesn't update */
-            if(item.isNotChange) {
-                item.domValue = item.value() !== 'undefined';
+            if(item.isNotChange){
+                if(item.condition){
+                    item.domValue = item.condition(value);
+                    continue;
+                }
+                item.domValue = !item.value().includes('undefined');
             }
         }
 
