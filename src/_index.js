@@ -1,4 +1,5 @@
 import {getUrlParam, scroll, round, setCSS, viewport, append} from "./utils";
+import {scrollObject} from "@/scroll";
 
 /**
  * Private class
@@ -78,6 +79,11 @@ class FrontEndDebug{
                 slug: 'document',
                 label: 'Document: [value]',
                 value: () => `${this.indicate(document.body.clientWidth, 'clientWidth')}/${this.indicate(document.body.clientHeight, 'clientHeight')}`
+            },
+            {
+                slug: 'scroll-bottom',
+                label: 'Scroll bottom: [value]',
+                value: () => `${scrollObject.bottom}`
             }
         ];
 
