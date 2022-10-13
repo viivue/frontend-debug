@@ -39,6 +39,7 @@ const isLastAccessPage = () => {
 const checkLastAccessPage = () => {
     if(isLastAccessPage()){
         currentTime = Date.now() - urlObj.totalTime;
+        return;
     }
     const urlInstance = new URL(location.href);
     urlObj = {
