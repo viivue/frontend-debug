@@ -81,6 +81,7 @@ class FrontEndDebug{
                 value: () => `${this.indicate(document.body.clientWidth, 'clientWidth')}/${this.indicate(document.body.clientHeight, 'clientHeight')}`
             },
             {
+                separator: true,
                 slug: 'time',
                 label: 'Uptime: [value]',
                 value: () => `${format(Date.now())}`,
