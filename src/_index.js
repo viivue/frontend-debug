@@ -1,5 +1,5 @@
 import {getUrlParam, scroll, round, setCSS, viewport, append} from "./utils";
-import {format} from "@/upTime";
+import {format, getRealTime} from "@/upTime";
 
 /**
  * Private class
@@ -85,6 +85,11 @@ class FrontEndDebug{
                 slug: 'time',
                 label: 'Uptime: [value]',
                 value: () => `${format(Date.now())}`,
+            },
+            {
+                slug: 'on-this-page',
+                label: 'On this page: [value]',
+                value: () => `${getRealTime(Date.now())}`,
             }
         ];
 

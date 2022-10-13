@@ -3,6 +3,8 @@ import {getDataFromLocalStorage, saveToLocalStorage} from "@/utils";
 let currentTime = Date.now();
 let urlObj;
 
+// Real time on particular page
+const realTime = Date.now();
 
 /**
  * Format time depends on seconds
@@ -17,6 +19,14 @@ export const format = (current, previous = currentTime) => {
     const minute = ('0' + Math.floor((seconds % 3600) / 60)).slice(-2);
     const second = ('0' + Math.floor(((seconds % 3600) % 60))).slice(-2);
     return `${hour}:${minute}:${second}`;
+};
+
+/**
+ * Get time on this page (refresh when reloaded the page)
+ * @returns string
+ */
+export const getRealTime = (current, previous = realTime) => {
+    return format(current, previous);
 };
 
 
@@ -55,5 +65,5 @@ window.addEventListener('beforeunload', () => {
     saveToLocalStorage('FEDebugData', {
         ...urlObj,
         totalTime: Date.now() - currentTime
-    })
+    });
 });
