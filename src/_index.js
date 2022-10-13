@@ -1,4 +1,6 @@
 import {getUrlParam, scroll, round, setCSS, viewport, append} from "./utils";
+import {browserObj} from "./browser";
+import '@/browser'
 
 /**
  * Private class
@@ -78,7 +80,32 @@ class FrontEndDebug{
                 slug: 'document',
                 label: 'Document: [value]',
                 value: () => `${this.indicate(document.body.clientWidth, 'clientWidth')}/${this.indicate(document.body.clientHeight, 'clientHeight')}`
-            }
+            },
+            {
+                isNotChange: true,
+                separator: true,
+                slug: 'IP',
+                label: 'IP: [value]',
+                value: () => `${browserObj.ip}`,
+            },
+            {
+                isNotChange: true,
+                slug: 'user-agent',
+                label: 'UserAgent: [value]',
+                value: () => `${browserObj.userAgent}`,
+            },
+            {
+                isNotChange: true,
+                slug: 'html-class',
+                label: 'HTML class: [value]',
+                value: () => `${browserObj.htmlClass}`,
+            },
+            {
+                isNotChange: true,
+                slug: 'body-class',
+                label: 'Body class: [value]',
+                value: () => `${browserObj.bodyClass}`,
+            },
         ];
 
         // HTML
@@ -130,9 +157,20 @@ class FrontEndDebug{
     updateStats(){
         // loop through all stats
         for(const item of this.stats){
+
+            /* check stat doesn't update if it has finished getting data */
+            if (item.isNotChange && item.domValue) {
+                continue;
+            }
+
             this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`).forEach(node => {
                 node.innerHTML = item.label.replace('[value]', item.value());
             });
+
+            /* enhance stat doesn't update */
+            if(item.isNotChange) {
+                item.domValue = item.value() !== 'undefined';
+            }
         }
 
         this.lastScrollPosition = scroll().top;
@@ -173,7 +211,8 @@ class FrontEndDebug{
             borderRadius: '0 10px 0 0',
             backdropFilter: 'blur(5px)',
             overflow: 'hidden',
-            minWidth: '175px'
+            minWidth: '175px',
+            maxWidth: '300px'
         });
         this.debugContainer.querySelectorAll('.head').forEach(node => {
             setCSS(node, {

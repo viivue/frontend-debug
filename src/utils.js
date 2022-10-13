@@ -142,3 +142,23 @@ export const getUrlParam = (param, url = window.location.href) => {
 export const append = (element, html) => {
     element.insertAdjacentHTML('beforeend', html);
 };
+
+
+/**
+ * Get property from an element
+ * @param element
+ * @param property
+ * @returns {string}
+ */
+export let getElementProperty = (element, property, callback) => {
+    let newElement = element;
+    if (typeof element === 'string') {
+        newElement = document.querySelector(element);
+    }
+
+    if (!newElement) return `Element doesn't exist!`;
+
+    const data = newElement.getAttribute(property);
+    // Deal with callback
+    callback(newElement.getAttribute(property));
+}
