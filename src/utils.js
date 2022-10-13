@@ -144,22 +144,22 @@ export const append = (element, html) => {
 };
 
 /**
- * Save data to LocalStorage
+ * Save data to SessionStorage
  * @param itemName
  * @param obj
  */
-export const saveToLocalStorage = (itemName, obj) => {
-    localStorage.setItem(itemName, JSON.stringify(obj));
+export const saveToSessionStorage = (itemName, obj) => {
+    sessionStorage.setItem(itemName, JSON.stringify(obj));
 };
 
 /**
- * Get data from LocalStorage
+ * Get data from SessionStorage
  * @param itemName
  * @param obj
  * @return object
  */
-export const getDataFromLocalStorage = (itemName, obj) => {
-    const item = JSON.parse(localStorage.getItem(itemName));
+export const getDataFromSessionStorage = (itemName, obj) => {
+    const item = JSON.parse(sessionStorage.getItem(itemName));
     if(!item) return null;
     return item;
 };

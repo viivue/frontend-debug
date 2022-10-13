@@ -1,4 +1,4 @@
-import {getDataFromLocalStorage, saveToLocalStorage} from "@/utils";
+import {getDataFromSessionStorage, saveToSessionStorage} from "@/utils";
 
 let currentTime = Date.now();
 let urlObj;
@@ -35,7 +35,7 @@ export const getRealTime = (current, previous = realTime) => {
  * @returns boolean
  */
 const isLastAccessPage = () => {
-    const urlObjStorage = getDataFromLocalStorage('FEDebugData');
+    const urlObjStorage = getDataFromSessionStorage('FEDebugData');
     if(!urlObjStorage) return false;
 
     urlObj = urlObjStorage;
@@ -62,7 +62,7 @@ const checkLastAccessPage = () => {
 };
 window.addEventListener('load', checkLastAccessPage);
 window.addEventListener('beforeunload', () => {
-    saveToLocalStorage('FEDebugData', {
+    saveToSessionStorage('FEDebugData', {
         ...urlObj,
         totalTime: Date.now() - currentTime
     });
