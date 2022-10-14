@@ -1,6 +1,7 @@
-import {getUrlParam, scroll, round, setCSS, viewport, append} from "./utils";
+import {getUrlParam, scroll, round, viewport} from "./utils";
 import {browserObj} from "./browser";
 import {getDiffTime, getRealTime} from "./upTime";
+import {generateHTML} from "./layout";
 
 const packageInfo = require('../package.json');
 
@@ -117,7 +118,7 @@ class FrontEndDebug{
         ];
 
         // HTML
-        this.generateHTML();
+        generateHTML(this);
 
         // update using rAF
         const onUpdate = () => {
@@ -187,104 +188,6 @@ class FrontEndDebug{
         }
 
         this.lastScrollPosition = scroll().top;
-    }
-
-    /**
-     * Generate FE Debug HTML
-     */
-    generateHTML(){
-        append(document.querySelector('body'), `<div id="fe-debug"><div class="head"><span>${this.packageInfo.prettyName} v${this.packageInfo.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
-        this.debugContainer = document.querySelector('#fe-debug');
-
-        // append stats
-        for(const item of this.stats){
-            const stats = this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`);
-            if(!stats.length){
-                // append new
-                append(this.debugContainer, `<div style="display:none" data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`);
-                const itemEl = this.debugContainer.querySelector(`[data-fe-debug="${item.slug}"]`);
-
-                // apply styling
-                if(typeof item.separator === 'boolean' && item.separator === true){
-                    // separator with border top
-                    itemEl.classList.add('sep');
-                }
-            }
-        }
-
-        // apply styling
-        setCSS(this.debugContainer, {
-            position: 'fixed',
-            bottom: '0',
-            left: '0',
-            zIndex: '9999999',
-            backgroundColor: 'rgba(0,0,0,0.7)',
-            color: 'white',
-            fontSize: '12px',
-            borderRadius: '0 10px 0 0',
-            backdropFilter: 'blur(5px)',
-            overflow: 'hidden',
-            minWidth: '175px',
-            maxWidth: '300px'
-        });
-        this.debugContainer.querySelectorAll('.head').forEach(node => {
-            setCSS(node, {
-                padding: '3px 10px',
-                backgroundColor: 'rgba(0,0,0,0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-            });
-        });
-        this.debugContainer.querySelectorAll('[data-fe-debug]').forEach(node => {
-            setCSS(node, {padding: '0 10px'});
-        });
-        this.debugContainer.querySelectorAll('.head + [data-fe-debug]').forEach(node => {
-            setCSS(node, {paddingTop: '5px'});
-        });
-        this.debugContainer.querySelectorAll('[data-fe-debug]:last-child').forEach(node => {
-            setCSS(node, {paddingBottom: '5px'});
-        });
-        this.debugContainer.querySelectorAll('.sep').forEach(node => {
-            setCSS(node, {
-                borderTop: '1px solid rgba(255,255,255,0.15)',
-                paddingTop: '5px',
-                marginTop: '5px'
-            });
-        });
-
-        const closeButton = this.debugContainer.querySelector('.head button');
-        setCSS(closeButton, {
-            backgroundColor: 'rgba(0,0,0,0)',
-            color: '#fff',
-            marginLeft: '10px',
-            padding: '3px',
-        });
-
-
-        // dialog open
-        const toggleDialog = () => {
-            if(this.isDialogOpen === true || this.isDialogOpen === 'true'){
-                this.debugContainer.querySelectorAll('[data-fe-debug]').forEach(node => setCSS(node, {display: 'block',}));
-                closeButton.textContent = '🔻';
-            }else{
-                this.debugContainer.querySelectorAll('[data-fe-debug]').forEach(node => setCSS(node, {display: 'none',}));
-                closeButton.textContent = '🔺';
-            }
-            sessionStorage.setItem("FrontEndDebugOpen", this.isDialogOpen);
-        };
-
-        // on init
-        this.isDialogOpen = sessionStorage.getItem("FrontEndDebugOpen") === null ? true : sessionStorage.getItem("FrontEndDebugOpen");
-        toggleDialog();
-
-        // on toggle
-        const head = this.debugContainer.querySelector('.head');
-        setCSS(head, {'cursor': 'pointer'});
-        head.addEventListener('click', () => {
-            this.isDialogOpen = !this.isDialogOpen;
-            toggleDialog();
-        });
     }
 
 
