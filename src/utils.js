@@ -142,3 +142,24 @@ export const getUrlParam = (param, url = window.location.href) => {
 export const append = (element, html) => {
     element.insertAdjacentHTML('beforeend', html);
 };
+
+/**
+ * Save data to SessionStorage
+ * @param itemName
+ * @param obj
+ */
+export const saveToSessionStorage = (itemName, obj) => {
+    sessionStorage.setItem(itemName, JSON.stringify(obj));
+};
+
+/**
+ * Get data from SessionStorage
+ * @param itemName
+ * @param obj
+ * @return object
+ */
+export const getDataFromSessionStorage = (itemName, obj) => {
+    const item = JSON.parse(sessionStorage.getItem(itemName));
+    if(!item) return null;
+    return item;
+};
