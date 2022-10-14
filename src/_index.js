@@ -1,5 +1,6 @@
 import {getUrlParam, scroll, round, setCSS, viewport, append} from "./utils";
 import {browserObj} from "./browser";
+import {getDiffTime, getRealTime} from "./upTime";
 import '@/browser'
 
 /**
@@ -80,6 +81,17 @@ class FrontEndDebug{
                 slug: 'document',
                 label: 'Document: [value]',
                 value: () => `${this.indicate(document.body.clientWidth, 'clientWidth')}/${this.indicate(document.body.clientHeight, 'clientHeight')}`
+            },
+            {
+                separator: true,
+                slug: 'time',
+                label: 'Uptime: [value]',
+                value: () => `${getDiffTime(Date.now())}`,
+            },
+            {
+                slug: 'on-this-page',
+                label: 'On this page: [value]',
+                value: () => `${getRealTime(Date.now())}`,
             },
             {
                 isNotChange: true,
@@ -279,7 +291,7 @@ class FrontEndDebug{
      * Validate before init
      * If the param is 'nodebug' => not show the debug.
      * If the param is 'debug' => show debug
-     * and the next time access the page (without closing the current page), we don't need the param anymore to show the FE Debug
+     * and the next upTime access the page (without closing the current page), we don't need the param anymore to show the FE Debug
      * @returns {boolean}
      */
     validate(){
