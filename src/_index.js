@@ -2,6 +2,8 @@ import {getUrlParam, scroll, round, setCSS, viewport, append} from "./utils";
 import {browserObj} from "./browser";
 import {getDiffTime, getRealTime} from "./upTime";
 
+const packageInfo = require('../package.json');
+
 /**
  * Private class
  */
@@ -12,7 +14,7 @@ class FrontEndDebug{
         if(!this.validate()) return false;
 
         // data
-        this.version = '0.0.2';
+        this.packageInfo = packageInfo;
         this.lastScrollPosition = scroll().top;
         this.maxSpeed = 0;
         this.lastSpeed = 0;
@@ -166,7 +168,7 @@ class FrontEndDebug{
             const value = item.value();
 
             /* check stat doesn't update if it has finished getting data */
-            if (item.isNotChange && item.domValue) {
+            if(item.isNotChange && item.domValue){
                 continue;
             }
 
@@ -191,7 +193,7 @@ class FrontEndDebug{
      * Generate FE Debug HTML
      */
     generateHTML(){
-        append(document.querySelector('body'), `<div id="fe-debug"><div class="head"><span>Debug UI v${this.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
+        append(document.querySelector('body'), `<div id="fe-debug"><div class="head"><span>${this.packageInfo.prettyName} v${this.packageInfo.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
         this.debugContainer = document.querySelector('#fe-debug');
 
         // append stats
@@ -251,14 +253,12 @@ class FrontEndDebug{
             });
         });
 
-        const closeButton = this.debugContainer.querySelectorAll('.head button');
-        closeButton.forEach(node => {
-            setCSS(node, {
-                backgroundColor: 'rgba(0,0,0,0)',
-                color: '#fff',
-                marginLeft: '10px',
-                padding: '3px',
-            });
+        const closeButton = this.debugContainer.querySelector('.head button');
+        setCSS(closeButton, {
+            backgroundColor: 'rgba(0,0,0,0)',
+            color: '#fff',
+            marginLeft: '10px',
+            padding: '3px',
         });
 
 
@@ -279,10 +279,12 @@ class FrontEndDebug{
         toggleDialog();
 
         // on toggle
-        closeButton.forEach(node => node.addEventListener('click', () => {
+        const head = this.debugContainer.querySelector('.head');
+        setCSS(head, {'cursor': 'pointer'});
+        head.addEventListener('click', () => {
             this.isDialogOpen = !this.isDialogOpen;
             toggleDialog();
-        }));
+        });
     }
 
 

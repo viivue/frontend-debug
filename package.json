@@ -1,6 +1,6 @@
 {
   "name": "frontend-debug",
-  "prettyName": "Front-end Debug",
+  "prettyName": "Front-end Debug UI",
   "codeName": "FrontEndDebug",
   "version": "0.0.3",
   "description": "Debug tool for front-end dev.",
