@@ -1,4 +1,5 @@
 import {getUrlParam, scroll, round, setCSS, viewport, append} from "./utils";
+import {browserObj} from "./browser";
 import {getDiffTime, getRealTime} from "./upTime";
 
 /**
@@ -90,7 +91,27 @@ class FrontEndDebug{
                 slug: 'on-this-page',
                 label: 'On this page: [value]',
                 value: () => `${getRealTime(Date.now())}`,
-            }
+            },
+            {
+                isNotChange: true,
+                separator: true,
+                slug: 'IP',
+                label: 'IP: [value]',
+                value: () => `${browserObj.ip}`,
+            },
+            {
+                isNotChange: true,
+                slug: 'user-agent',
+                label: 'UserAgent: [value]',
+                value: () => `${browserObj.userAgent}`,
+            },
+            {
+                isNotChange: true,
+                slug: 'browser-class',
+                label: 'View: [value]',
+                value: () => `${[browserObj.htmlClass, browserObj.bodyClass].join(', ')}`,
+                condition: (value) => value.trim().length > 1,
+            },
         ];
 
         // HTML
@@ -142,9 +163,25 @@ class FrontEndDebug{
     updateStats(){
         // loop through all stats
         for(const item of this.stats){
+            const value = item.value();
+
+            /* check stat doesn't update if it has finished getting data */
+            if (item.isNotChange && item.domValue) {
+                continue;
+            }
+
             this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`).forEach(node => {
-                node.innerHTML = item.label.replace('[value]', item.value());
+                node.innerHTML = item.label.replace('[value]', value);
             });
+
+            /* enhance stat doesn't update */
+            if(item.isNotChange){
+                if(item.condition){
+                    item.domValue = item.condition(value);
+                    continue;
+                }
+                item.domValue = !item.value().includes('undefined');
+            }
         }
 
         this.lastScrollPosition = scroll().top;
@@ -185,7 +222,8 @@ class FrontEndDebug{
             borderRadius: '0 10px 0 0',
             backdropFilter: 'blur(5px)',
             overflow: 'hidden',
-            minWidth: '175px'
+            minWidth: '175px',
+            maxWidth: '300px'
         });
         this.debugContainer.querySelectorAll('.head').forEach(node => {
             setCSS(node, {
