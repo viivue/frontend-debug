@@ -1,7 +1,6 @@
 import {getUrlParam, scroll, round, setCSS, viewport, append} from "./utils";
 import {browserObj} from "./browser";
 import {getDiffTime, getRealTime} from "./upTime";
-import '@/browser'
 
 /**
  * Private class

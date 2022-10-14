@@ -1,4 +1,4 @@
-import {getElementProperty} from "@/utils";
+import {getElementProperty} from "./utils";
 
 export const browserObj = {};
 
