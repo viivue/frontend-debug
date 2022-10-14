@@ -31,7 +31,7 @@ export function generateHTML(context){
      * Styling
      */
 
-    // apply styling
+    // wrapper
     setCSS(context.debugContainer, {
         position: 'fixed',
         bottom: '0',
@@ -44,26 +44,35 @@ export function generateHTML(context){
         backdropFilter: 'blur(5px)',
         overflow: 'hidden',
         minWidth: '175px',
-        maxWidth: '300px'
+        maxWidth: '300px',
+        transition: 'all .3s ease'
     });
-    context.debugContainer.querySelectorAll('.head').forEach(node => {
-        setCSS(node, {
-            padding: '3px 10px',
-            backgroundColor: 'rgba(0,0,0,0.1)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        });
+
+    // head
+    setCSS(context.debugContainer.querySelector('.head'), {
+        padding: '3px 10px',
+        backgroundColor: 'rgba(0,0,0,0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     });
+
+    // stat row
     context.debugContainer.querySelectorAll('[data-fe-debug]').forEach(node => {
         setCSS(node, {padding: '0 10px'});
     });
+
+    // first row
     context.debugContainer.querySelectorAll('.head + [data-fe-debug]').forEach(node => {
         setCSS(node, {paddingTop: '5px'});
     });
+
+    // last row
     context.debugContainer.querySelectorAll('[data-fe-debug]:last-child').forEach(node => {
         setCSS(node, {paddingBottom: '5px'});
     });
+
+    // separator
     context.debugContainer.querySelectorAll('.sep').forEach(node => {
         setCSS(node, {
             borderTop: '1px solid rgba(255,255,255,0.15)',
