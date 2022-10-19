@@ -120,7 +120,7 @@ class FrontEndDebug{
                 separator: true,
                 slug: 'scroll-bottom',
                 label: 'Scroll to bottom: [value]',
-                value: () => `${scrollObject.bottom}`,
+                value: () => `${scrollObject.bottom(2)}`,
                 isNotChange: true,
             }
         ];
