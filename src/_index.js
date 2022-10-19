@@ -1,7 +1,8 @@
 import {getUrlParam, scroll, round, viewport} from "./utils";
-import {browserObj} from "./browser";
-import {getDiffTime, getRealTime} from "./upTime";
 import {generateHTML} from "./layout";
+import {getDiffTime, getRealTime} from "./upTime";
+import {browserObj} from "./browser";
+import {scrollObject} from "./scroll";
 
 const packageInfo = require('../package.json');
 
@@ -115,6 +116,13 @@ class FrontEndDebug{
                 value: () => `${[browserObj.htmlClass, browserObj.bodyClass].join(', ')}`,
                 condition: (value) => value.trim().length > 1,
             },
+            {
+                separator: true,
+                slug: 'scroll-bottom',
+                label: 'Scroll to bottom: [value]',
+                value: () => `${scrollObject.bottom(2)}`,
+                isNotChange: true,
+            }
         ];
 
         // HTML
