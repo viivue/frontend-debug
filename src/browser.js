@@ -1,6 +1,6 @@
 import {getElementProperty} from "./utils";
 
-export const browserObj = {};
+let ip = '';
 
 /**
  * Get browser IP from API
@@ -9,39 +9,35 @@ export const browserObj = {};
 const getBrowserIp = async() => {
     try{
         const response = await fetch('https://api.ipify.org/?format=json');
-        if(!response.ok)
-            return false;
-        return await response.json();
+        if(!response.ok){
+            ip = 'Failed to get current IP!';
+            return;
+        }
+        const {ip: fetchIp} = await response.json();
+        ip = fetchIp;
     }catch(e){
-        return false;
+        ip = 'Failed to get current IP!';
     }
 };
 
 
 /**
- * Get and return browser information
- * @returns {*}
+ * Get and return browser user-agent
+ * @returns {string}
  */
-const getBrowserInformation = async() => {
-    // Get HTML class
-    browserObj.htmlClass = `<button onclick="getElementProperty('html', 'class', alert)">HTML class</button>`;
+const getBrowserUserAgent = () => navigator.userAgent;
 
-    // Get Body class
-    browserObj.bodyClass = `<button onclick="getElementProperty('body', 'class', alert)">Body class</button>`;
+window.getElementProperty = getElementProperty;
 
-    // Get browser userAgent
-    browserObj.userAgent = navigator.userAgent;
-
-    // Assign function to window object
-    window.getElementProperty = getElementProperty;
-
-    // Get browser IP
-    const ipObj = await getBrowserIp();
-    if(!ipObj){
-        browserObj.ip = 'Failed to get current IP!';
-        return;
-    }
-    browserObj.ip = ipObj.ip;
+export const browserObj = {
+    getIpAddress: () => {
+        if(!ip){
+            getBrowserIp();
+            return undefined;
+        }
+        return ip;
+    },
+    getUserAgent: getBrowserUserAgent(),
+    getHTMLClass: `<button onclick="getElementProperty('html', 'class', alert)">HTML class</button>`,
+    getBodyClass: `<button onclick="getElementProperty('body', 'class', alert)">Body class</button>`,
 };
-
-window.addEventListener('load', getBrowserInformation);

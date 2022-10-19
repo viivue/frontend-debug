@@ -3,6 +3,7 @@ let windowScrollY = window.scrollY,
 
 window.scrollBottom = (v) => {
     let time = 25;
+    if(timeout) clearInterval(timeout);
     timeout = setInterval(() => {
         windowScrollY = window.scrollY;
         if(window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) clearTimeout(timeout);
@@ -21,6 +22,5 @@ window.addEventListener('scroll', () => {
 });
 
 export const scrollObject = {
-    top: `<button onclick="scrollTop()">Scroll</button>`,
-    bottom: (v) => `<button onclick="scrollBottom(${v})">Scroll</button>`
+    scroll: (v, title) => `<button onclick="scrollBottom(${v})">${title}</button>`,
 };
