@@ -85,13 +85,14 @@ class FrontEndDebug{
                 label: 'Document: [value]',
                 value: () => `${this.indicate(document.body.clientWidth, 'clientWidth')}/${this.indicate(document.body.clientHeight, 'clientHeight')}`
             },
+            // {
+            //     separator: true,
+            //     slug: 'time',
+            //     label: 'Uptime: [value]',
+            //     value: () => `${getDiffTime(Date.now())}`,
+            // },
             {
                 separator: true,
-                slug: 'time',
-                label: 'Uptime: [value]',
-                value: () => `${getDiffTime(Date.now())}`,
-            },
-            {
                 slug: 'on-this-page',
                 label: 'On this page: [value]',
                 value: () => `${getRealTime(Date.now())}`,
@@ -104,6 +105,7 @@ class FrontEndDebug{
                 value: () => `${browserObj.getIpAddress()}`,
             },
             {
+                separator: true,
                 isNotChange: true,
                 slug: 'user-agent',
                 label: 'UserAgent: [value]',
