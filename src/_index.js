@@ -101,26 +101,26 @@ class FrontEndDebug{
                 separator: true,
                 slug: 'IP',
                 label: 'IP: [value]',
-                value: () => `${browserObj.ip}`,
+                value: () => `${browserObj.getIpAddress()}`,
             },
             {
                 isNotChange: true,
                 slug: 'user-agent',
                 label: 'UserAgent: [value]',
-                value: () => `${browserObj.userAgent}`,
+                value: () => `${browserObj.getUserAgent}`,
             },
             {
                 isNotChange: true,
                 slug: 'browser-class',
                 label: 'View: [value]',
-                value: () => `${[browserObj.htmlClass, browserObj.bodyClass].join(', ')}`,
+                value: () => `${[browserObj.getHTMLClass, browserObj.getBodyClass].join(', ')}`,
                 condition: (value) => value.trim().length > 1,
             },
             {
                 separator: true,
                 slug: 'scroll-bottom',
                 label: 'Scroll to bottom: [value]',
-                value: () => `${scrollObject.bottom(2)}`,
+                value: () => `${scrollObject.scroll(2, 'Slow')} - ${scrollObject.scroll(10, 'Normal')} - ${scrollObject.scroll(20, 'Fast')}`,
                 isNotChange: true,
             }
         ];

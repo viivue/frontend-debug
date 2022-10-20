@@ -146,7 +146,10 @@ export const getRealTime = (currentDate, previousDate = realTime) => {
 const getUrl = () => {
     const url = new URL(location.href);
     if(url.pathname === '/') return url.origin;
-    return url.origin + url.pathname + '/';
+
+    const newUrl = url.origin + url.pathname;
+    if(newUrl.slice(-1) === '/') return newUrl;
+    return newUrl + '/';
 };
 
 

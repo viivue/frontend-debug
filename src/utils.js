@@ -155,10 +155,9 @@ export const saveToSessionStorage = (itemName, obj) => {
 /**
  * Get data from SessionStorage
  * @param itemName
- * @param obj
  * @return object
  */
-export const getDataFromSessionStorage = (itemName, obj) => {
+export const getDataFromSessionStorage = (itemName) => {
     const item = JSON.parse(sessionStorage.getItem(itemName));
     if(!item) return null;
     return item;
@@ -169,6 +168,7 @@ export const getDataFromSessionStorage = (itemName, obj) => {
  * Get property from an element
  * @param element
  * @param property
+ * @param callback
  * @returns {string}
  */
 export let getElementProperty = (element, property, callback) => {
@@ -176,10 +176,8 @@ export let getElementProperty = (element, property, callback) => {
     if (typeof element === 'string') {
         newElement = document.querySelector(element);
     }
-
     if (!newElement) return `Element doesn't exist!`;
 
-    const data = newElement.getAttribute(property);
     // Deal with callback
     callback(newElement.getAttribute(property));
 }
