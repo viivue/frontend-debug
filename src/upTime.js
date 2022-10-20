@@ -1,4 +1,4 @@
-import {getDataFromSessionStorage, saveToSessionStorage} from "./utils";
+import 'piajs';
 
 let currentTime = Date.now();
 let urlObj = {},
@@ -16,7 +16,7 @@ const realTime = Date.now();
  * @returns boolean
  */
 const isLastAccessPage = () => {
-    urlStorageObj = getDataFromSessionStorage('FEDebugData');
+    urlStorageObj = Pia.get('FEDebugData');
     if(!urlStorageObj) return false;
 
     // Destructuring object from SessionStorage
@@ -110,7 +110,7 @@ const replaceUrlWithNewUrl = (url, urlList) => {
  */
 const handlePageExit = () => {
     urlStorageObj.urlList[index].totalTime = Date.now() - currentTime;
-    saveToSessionStorage('FEDebugData', urlStorageObj);
+    Pia.set('FEDebugData', urlStorageObj, {expires: 'session'});
 };
 window.addEventListener('load', checkLastAccessPage);
 window.addEventListener('beforeunload', handlePageExit);
