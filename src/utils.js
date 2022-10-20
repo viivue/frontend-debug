@@ -144,27 +144,6 @@ export const append = (element, html) => {
 };
 
 /**
- * Save data to SessionStorage
- * @param itemName
- * @param obj
- */
-export const saveToSessionStorage = (itemName, obj) => {
-    sessionStorage.setItem(itemName, JSON.stringify(obj));
-};
-
-/**
- * Get data from SessionStorage
- * @param itemName
- * @return object
- */
-export const getDataFromSessionStorage = (itemName) => {
-    const item = JSON.parse(sessionStorage.getItem(itemName));
-    if(!item) return null;
-    return item;
-};
-
-
-/**
  * Get property from an element
  * @param element
  * @param property
