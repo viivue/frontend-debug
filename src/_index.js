@@ -97,13 +97,13 @@ class FrontEndDebug{
                 label: 'On this page: [value]',
                 value: () => `${getRealTime(Date.now())}`,
             },
-            {
-                isNotChange: true,
-                separator: true,
-                slug: 'IP',
-                label: 'IP: [value]',
-                value: () => `${browserObj.getIpAddress()}`,
-            },
+            // {
+            //     isNotChange: true,
+            //     separator: true,
+            //     slug: 'IP',
+            //     label: 'IP: [value]',
+            //     value: () => `${browserObj.getIpAddress()}`,
+            // },
             {
                 separator: true,
                 isNotChange: true,
