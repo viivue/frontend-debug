@@ -7,7 +7,7 @@ const {paths, packageInfo, bannerConfig, env} = require('./config');
  * TARGET: libraryTarget
  */
 const libraryTarget = env.TARGET || 'umd';
-let filename, experiments = {}, library = undefined;
+let filename, experiments = {}, library = undefined, path = undefined;
 switch(libraryTarget){
     case "module":
         filename = `${packageInfo.outputFilename}.module.js`;
@@ -17,7 +17,9 @@ switch(libraryTarget){
         break;
     default:
         //library = `${packageInfo.codeName}`;
-        filename = `${packageInfo.outputFilename}.min.js`;
+        //filename = `${packageInfo.outputFilename}.min.js`;
+        filename = 'script.js';
+        path = paths.build;
 }
 
 module.exports = {
@@ -26,6 +28,7 @@ module.exports = {
     entry: paths.entry,
     experiments,
     output: {
+        path,
         filename,
         library,
         libraryTarget,
