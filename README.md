@@ -1,12 +1,27 @@
 # 🐛 Frontend-debug
 
 [![release](https://badgen.net/github/release/viivue/frontend-debug/)](https://github.com/viivue/frontend-debug/releases/latest)
-[![minified](https://badgen.net/badge/minified/6KB/cyan)](https://www.jsdelivr.com/package/gh/viivue/frontend-debug)
-[![jsdelivr](https://data.jsdelivr.com/v1/package/gh/viivue/frontend-debug/badge?style=rounded)](https://www.jsdelivr.com/package/gh/viivue/frontend-debug)
+[![minified](https://badgen.net/badge/minified/13KB/cyan)](https://www.jsdelivr.com/package/gh/viivue/frontend-debug)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/2eb250dd-cab2-4e06-8996-df32cf606042/deploy-status)](https://app.netlify.com/sites/fdebug/deploys)
 > Debug tool for front-end dev
 
 ## Installation
+
+### NPM Package
+
+Install NPM package
+
+```shell
+npm i @viivue/frontend-debug
+```
+
+Import
+
+```js
+import "@viivue/frontend-debug";
+```
+
+### CDN
 
 Inject this script tag at the end of your page, right above `</body>`
 
@@ -46,44 +61,34 @@ Or just close the current tab.
 
 ## Deployment
 
-Run `./web` in live server
+### Dev server
+
+Run dev server
 
 ```shell
 npm run dev
 ```
 
-Build files from `./src` to `./dist`
+You can add more dev site by duplicate dev or web folder and update the npm scripts.
+
+### Generate production files
+
+Generate UMD and module version
 
 ```shell
 npm run prod
 ```
 
-Build sources from `./web` to `./build`, also generate a `script.js` into `./build` for public access to the script file.
-
-```shell
-npm run build
-```
-<!---
-Build files from `./src` to `./dist` then publish to `npm`
+Generate UMD and module version then publish NPM package
 
 ```shell
 npm run publish
 ```
---->
 
-## Test production output
+### Build sites
 
-Generate production output
+Build production site
 
 ```shell
-npm run prod
+npm run build
 ```
-
-Then load the output script in dev site at `/web/template.html`
-
-```html
-<!-- Test production output -->
-<script src="/script.js"></script>
-```
-
-And remove `import '@/_index'` from `/web/index.js`

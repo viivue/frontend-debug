@@ -1,8 +1,9 @@
 {
-  "name": "frontend-debug",
+  "name": "@viivue/frontend-debug",
+  "outputFilename": "frontend-debug",
   "prettyName": "Front-end Debug UI",
   "codeName": "FrontEndDebug",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Debug tool for front-end dev.",
   "homepage": "https://github.com/viivue/frontend-debug",
   "repository": {
@@ -21,13 +22,11 @@
   "license": "MIT",
   "main": "./dist/frontend-debug.module.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js & npm run build-umd",
-    "build-umd": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js",
-    "build-netlify": "cross-env NODE_ENV=production webpack --config config/webpack.netlify.js",
-    "build-module": "cross-env NODE_ENV=production webpack --config config/webpack.module.js",
-    "prod": "cross-env NODE_ENV=production npm run build-umd",
-    "build": "cross-env NODE_ENV=production webpack --config config/webpack.web.js && npm run build-netlify",
-    "publish": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js & npm publish"
+    "dev": "webpack serve --config config/webpack.dev.js",
+    "web": "cross-env ENTRY=web PORT=8081 webpack serve --config config/webpack.dev.js",
+    "build": "cross-env ENTRY=dev webpack --config config/webpack.build.js",
+    "prod": "webpack --config config/webpack.prod.js && cross-env TARGET=module webpack --config config/webpack.prod.js",
+    "publish": "npm run prod & npm publish"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
@@ -40,7 +39,6 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.4.0",
     "css-minimizer-webpack-plugin": "^3.1.1",
-    "dat.gui": "^0.7.9",
     "html-loader": "^3.1.0",
     "html-webpack-plugin": "^5.3.2",
     "mini-css-extract-plugin": "^2.4.2",
