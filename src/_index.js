@@ -173,12 +173,8 @@ class FrontEndDebug{
      * Update stats of each value when frame reset
      */
     updateStats(){
-        // loop through all stats
-        for(const item of this.stats){
+        this.stats.forEach((item, index, arr) => {
             const value = item.value();
-
-            /* If stat doesn't need to update and already has value => do nothing */
-            if(item.isNotChange && item.hasValue) continue;
 
             this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`).forEach(node => {
                 if(value === item.oldValue) return;
@@ -190,9 +186,9 @@ class FrontEndDebug{
                 item.oldValue = value;
             });
 
-            /* Check the value's status of not-change property */
-            if(item.isNotChange) item.hasValue = item.value();
-        }
+            /* If stat doesn't need to update and already has value => remove */
+            if(item.isNotChange && value) arr.splice(index);
+        });
 
         this.lastScrollPosition = scroll().top;
     }
