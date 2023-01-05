@@ -3,6 +3,7 @@
 [![release](https://badgen.net/github/release/viivue/frontend-debug/)](https://github.com/viivue/frontend-debug/releases/latest)
 [![minified](https://badgen.net/badge/minified/13KB/cyan)](https://www.jsdelivr.com/package/gh/viivue/frontend-debug)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/2eb250dd-cab2-4e06-8996-df32cf606042/deploy-status)](https://app.netlify.com/sites/fdebug/deploys)
+
 > Debug tool for front-end dev
 
 ## Installation
@@ -61,34 +62,13 @@ Or just close the current tab.
 
 ## Deployment
 
-### Dev server
-
-Run dev server
-
 ```shell
+# Run dev server
 npm run dev
-```
 
-You can add more dev site by duplicate dev or web folder and update the npm scripts.
-
-### Generate production files
-
-Generate UMD and module version
-
-```shell
-npm run prod
-```
-
-Generate UMD and module version then publish NPM package
-
-```shell
+# Release (update package.json carefully first)
 npm run publish
-```
 
-### Build sites
-
-Build production site
-
-```shell
-npm run build
+# Build production site (for Netlify)
+npm run publish
 ```
