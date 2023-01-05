@@ -140,7 +140,10 @@ class FrontEndDebug{
         // button style
         this.debugContainer.querySelectorAll('[data-fe-debug] button').forEach(node => {
             setCSS(node, {
-                backgroundColor: 'none',
+                backgroundColor: 'transparent',
+                color: '#fff',
+                cursor: 'pointer',
+                textDecoration: 'underline',
                 padding: 0,
                 margin: 0,
                 fontSize: '12px',
