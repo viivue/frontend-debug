@@ -1,4 +1,4 @@
-import {getUrlParam, scroll, round, viewport} from "./utils";
+import {getUrlParam, scroll, round, viewport, setCSS} from "./utils";
 import {generateHTML} from "./layout";
 import {getDiffTime, getRealTime} from "./upTime";
 import {browserObj} from "./browser";
@@ -135,6 +135,19 @@ class FrontEndDebug{
             window.requestAnimationFrame(onUpdate);
         };
         window.requestAnimationFrame(onUpdate);
+
+
+        // button style
+        this.debugContainer.querySelectorAll('[data-fe-debug] button').forEach(node => {
+            setCSS(node, {
+                backgroundColor: 'none',
+                padding: 0,
+                margin: 0,
+                fontSize: '12px',
+                width: 'auto',
+                minWidth: 'unset'
+            });
+        });
     }
 
     /**
