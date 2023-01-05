@@ -98,25 +98,24 @@ class FrontEndDebug{
                 value: () => `${getRealTime(Date.now())}`,
             },
             // {
-            //     isNotChange: true,
             //     separator: true,
             //     slug: 'IP',
             //     label: 'IP: [value]',
-            //     value: () => `${browserObj.getIpAddress()}`,
+            //     value: () => browserObj.getIpAddress(),
+            //     isNotChange: true,
             // },
             {
                 separator: true,
-                isNotChange: true,
                 slug: 'user-agent',
                 label: 'UserAgent: [value]',
-                value: () => `${browserObj.getUserAgent}`,
+                value: () => browserObj.getUserAgent,
+                isNotChange: true,
             },
             {
-                isNotChange: true,
                 slug: 'browser-class',
                 label: 'View: [value]',
                 value: () => `${[browserObj.getHTMLClass, browserObj.getBodyClass].join(', ')}`,
-                condition: (value) => value.trim().length > 1,
+                isNotChange: true,
             },
             {
                 separator: true,
@@ -174,28 +173,22 @@ class FrontEndDebug{
      * Update stats of each value when frame reset
      */
     updateStats(){
-        // loop through all stats
-        for(const item of this.stats){
+        this.stats.forEach((item, index, arr) => {
             const value = item.value();
 
-            /* check stat doesn't update if it has finished getting data */
-            if(item.isNotChange && item.domValue){
-                continue;
-            }
-
             this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`).forEach(node => {
+                if(value === item.oldValue) return;
+
+                // Render new value
                 node.innerHTML = item.label.replace('[value]', value);
+
+                // assign value for the next checking
+                item.oldValue = value;
             });
 
-            /* enhance stat doesn't update */
-            if(item.isNotChange){
-                if(item.condition){
-                    item.domValue = item.condition(value);
-                    continue;
-                }
-                item.domValue = !item.value().includes('undefined');
-            }
-        }
+            /* If stat doesn't need to update and already has value => remove */
+            if(item.isNotChange && value) arr.splice(index);
+        });
 
         this.lastScrollPosition = scroll().top;
     }
