@@ -1,8 +1,7 @@
-// public styles
-import '../public/style/fonts.css';
-
-// private style
-import './style.scss';
+// style
+import '@viivue/atomic-css';
+import 'honcau';
+//import './style.scss';
 
 // source script
 import '@/_index';
@@ -15,10 +14,6 @@ const packageInfo = require('../package.json');
  */
 // update title
 const title = `${packageInfo.prettyName} v${packageInfo.version}`;
-document.title = `[DEV] ${title} - ${packageInfo.description}`;
+document.title = `${title} - ${packageInfo.description}`;
 document.querySelector('[data-title]').innerHTML = title;
 document.querySelector('[data-description]').innerHTML = packageInfo.description;
-
-/**
- * Lib usage
- */
