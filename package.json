@@ -3,7 +3,7 @@
   "outputFilename": "frontend-debug",
   "prettyName": "Front-end Debug UI",
   "codeName": "FrontEndDebug",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Debug tool for front-end dev.",
   "homepage": "https://github.com/viivue/frontend-debug",
   "repository": {
@@ -23,7 +23,6 @@
   "main": "./dist/frontend-debug.module.js",
   "scripts": {
     "dev": "webpack serve --config config/webpack.dev.js",
-    "web": "cross-env ENTRY=web PORT=8081 webpack serve --config config/webpack.dev.js",
     "build": "cross-env ENTRY=dev webpack --config config/webpack.build.js && webpack --config config/webpack.prod.js",
     "prod": "webpack --config config/webpack.prod.js && cross-env TARGET=module webpack --config config/webpack.prod.js",
     "publish": "npm run prod & npm publish"
