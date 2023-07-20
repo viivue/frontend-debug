@@ -8,7 +8,7 @@ export function generateHTML(context){
      * Wrapper HTML
      */
 
-    append(document.querySelector('body'), `<div id="fe-debug"><div class="head"><span>${context.packageInfo.prettyName} v${context.packageInfo.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
+    append(document.querySelector('body'), `<div id="fe-debug" style="opacity:0;"><div class="head"><span>${context.packageInfo.prettyName} v${context.packageInfo.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
     context.debugContainer = document.querySelector('#fe-debug');
 
     // append stats
@@ -45,7 +45,7 @@ export function generateHTML(context){
         overflow: 'hidden',
         minWidth: '175px',
         maxWidth: '300px',
-        transition: 'all .3s ease'
+        transition: 'all .3s ease',
     });
 
     // head
@@ -80,6 +80,14 @@ export function generateHTML(context){
             marginTop: '5px'
         });
     });
+
+
+    // show debug with delay to avoid CLS
+    setTimeout(() => {
+        setCSS(context.debugContainer, {
+            opacity: '1'
+        });
+    }, 300);
 
 
     /**

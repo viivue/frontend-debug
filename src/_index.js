@@ -3,6 +3,7 @@ import {generateHTML} from "./layout";
 import {getDiffTime, getRealTime} from "./upTime";
 import {browserObj} from "./browser";
 import {scrollObject} from "./scroll";
+import {getAddressBarHeight} from "./address-bar";
 
 const packageInfo = require('../package.json');
 
@@ -28,6 +29,8 @@ class FrontEndDebug{
         this.memory = {};
         this.indicateTime = parseInt(getUrlParam('debug')) || parseInt(sessionStorage.getItem("FrontEndDebugIndicateTime")) || 500;
         sessionStorage.setItem("FrontEndDebugIndicateTime", this.indicateTime);
+
+        this.addressBarSize = 0;
 
         this.stats = [
             {
@@ -84,6 +87,18 @@ class FrontEndDebug{
                 slug: 'document',
                 label: 'Document: [value]',
                 value: () => `${this.indicate(document.body.clientWidth, 'clientWidth')}/${this.indicate(document.body.clientHeight, 'clientHeight')}`
+            },
+            {
+                slug: 'address-bar',
+                label: 'Address bar: [value]',
+                value: () => {
+                    const newAddressBarHeight = getAddressBarHeight();
+                    if(newAddressBarHeight > this.addressBarSize){
+                        this.addressBarSize = newAddressBarHeight;
+                    }
+
+                    return this.addressBarSize;
+                }
             },
             // {
             //     separator: true,

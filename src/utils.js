@@ -152,11 +152,28 @@ export const append = (element, html) => {
  */
 export let getElementProperty = (element, property, callback) => {
     let newElement = element;
-    if (typeof element === 'string') {
+    if(typeof element === 'string'){
         newElement = document.querySelector(element);
     }
-    if (!newElement) return `Element doesn't exist!`;
+    if(!newElement) return `Element doesn't exist!`;
 
     // Deal with callback
     callback(newElement.getAttribute(property));
 }
+
+
+/**
+ * Create DOM el
+ * @param tag
+ * @param className
+ * @returns {HTMLDivElement}
+ */
+export const createEl = ({tag = 'div', className = ''}) => {
+    const el = document.createElement(tag);
+
+    if(className.length){
+        el.classList.add(className);
+    }
+
+    return el;
+};
