@@ -30,6 +30,8 @@ class FrontEndDebug{
         this.indicateTime = parseInt(getUrlParam('debug')) || parseInt(sessionStorage.getItem("FrontEndDebugIndicateTime")) || 500;
         sessionStorage.setItem("FrontEndDebugIndicateTime", this.indicateTime);
 
+        this.addressBarSize = 0;
+
         this.stats = [
             {
                 slug: 'scroll',
@@ -89,7 +91,14 @@ class FrontEndDebug{
             {
                 slug: 'address-bar',
                 label: 'Address bar: [value]',
-                value: () => getAddressBarHeight()
+                value: () => {
+                    const newAddressBarHeight = getAddressBarHeight();
+                    if(newAddressBarHeight > this.addressBarSize){
+                        this.addressBarSize = newAddressBarHeight;
+                    }
+
+                    return this.addressBarSize;
+                }
             },
             // {
             //     separator: true,
