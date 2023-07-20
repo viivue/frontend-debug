@@ -3,7 +3,7 @@
   "outputFilename": "frontend-debug",
   "prettyName": "Front-end Debug UI",
   "codeName": "FrontEndDebug",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Debug tool for front-end dev.",
   "homepage": "https://github.com/viivue/frontend-debug",
   "repository": {

@@ -3,6 +3,7 @@ import {generateHTML} from "./layout";
 import {getDiffTime, getRealTime} from "./upTime";
 import {browserObj} from "./browser";
 import {scrollObject} from "./scroll";
+import {getAddressBarHeight} from "./address-bar";
 
 const packageInfo = require('../package.json');
 
@@ -84,6 +85,11 @@ class FrontEndDebug{
                 slug: 'document',
                 label: 'Document: [value]',
                 value: () => `${this.indicate(document.body.clientWidth, 'clientWidth')}/${this.indicate(document.body.clientHeight, 'clientHeight')}`
+            },
+            {
+                slug: 'address-bar',
+                label: 'Address bar: [value]',
+                value: () => getAddressBarHeight()
             },
             // {
             //     separator: true,
