@@ -26,7 +26,7 @@ const getBrowserIp = async() => {
  * @returns {string}
  */
 const getBrowserUserAgent = () => navigator.userAgent;
-const getHTMLClassElement = () => console.log(document.querySelector('html').getAttribute('class'));
+const getHTMLClassElement = () => document.querySelector('html').getAttribute('class');
 const getBodyClassElement = () => document.querySelector('body').getAttribute('class');
 
 window.getElementProperty = getElementProperty;
