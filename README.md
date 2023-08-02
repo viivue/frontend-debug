@@ -67,7 +67,7 @@ Or just close the current tab.
 npm run dev
 
 # Release (update package.json carefully first)
-npm run publish
+npm run prod
 
 # Build production site (for Netlify)
 npm run publish
