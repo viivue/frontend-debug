@@ -127,9 +127,15 @@ class FrontEndDebug{
                 isNotChange: true,
             },
             {
-                slug: 'browser-class',
-                label: 'View: [value]',
-                value: () => `${[browserObj.getHTMLClass, browserObj.getBodyClass].join(', ')}`,
+                slug: 'HTML-class',
+                label: 'HTML class: [value]',
+                value: () => browserObj.getHTMLClass,
+                isNotChange: true,
+            },
+            {
+                slug: 'body-class',
+                label: 'Body class: [value]',
+                value: () => browserObj.getBodyClass,
                 isNotChange: true,
             },
             {

@@ -26,6 +26,8 @@ const getBrowserIp = async() => {
  * @returns {string}
  */
 const getBrowserUserAgent = () => navigator.userAgent;
+const getHTMLClassElement = () => document.querySelector('html').getAttribute('class');
+const getBodyClassElement = () => document.querySelector('body').getAttribute('class');
 
 window.getElementProperty = getElementProperty;
 
@@ -38,6 +40,6 @@ export const browserObj = {
         return ip;
     },
     getUserAgent: getBrowserUserAgent(),
-    getHTMLClass: `<button onclick="getElementProperty('html', 'class', alert)">HTML class</button>`,
-    getBodyClass: `<button onclick="getElementProperty('body', 'class', alert)">Body class</button>`,
+    getHTMLClass: getHTMLClassElement(),
+    getBodyClass: getBodyClassElement(),
 };
