@@ -66,7 +66,7 @@ class FrontEndDebug{
         this.events.add(eventName, callback);
     }
 
-    add(obj){
+    addStat(obj){
         this.stats.push(obj);
     }
 

@@ -37,7 +37,7 @@ export function initScroll(context){
     let lastSpeedTotal = 0;
 
 
-    context.add({
+    context.addStat({
         slug: 'scroll',
         label: 'Scroll: [value]',
         value: () => {
@@ -47,7 +47,7 @@ export function initScroll(context){
         }
     });
 
-    context.add({
+    context.addStat({
         separator: true,
         slug: 'speed',
         label: 'Speed: [value]',
@@ -62,21 +62,21 @@ export function initScroll(context){
         }
     });
 
-    context.add({
-            slug: 'average-speed',
-            label: 'Avg. speed: [value]',
-            value: () => {
-                // only update if changes
-                if(context.lastScrollPosition !== scroll().top){
-                    averageSpeed = lastSpeedTotal / lastSpeedCount;
-                }
-
-                return context.indicate(round(averageSpeed), 'averageSpeed');
+    context.addStat({
+        slug: 'average-speed',
+        label: 'Avg. speed: [value]',
+        value: () => {
+            // only update if changes
+            if(context.lastScrollPosition !== scroll().top){
+                averageSpeed = lastSpeedTotal / lastSpeedCount;
             }
+
+            return context.indicate(round(averageSpeed), 'averageSpeed');
+        }
         }
     );
 
-    context.add({
+    context.addStat({
         slug: 'max-speed',
         label: 'Max speed: [value]',
         value: () => {
@@ -85,7 +85,7 @@ export function initScroll(context){
         }
     });
 
-    context.add({
+    context.addStat({
         separator: true,
         slug: 'scroll-bottom',
         label: 'Scroll to bottom: [value]',

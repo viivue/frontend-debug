@@ -1,9 +1,9 @@
 import {viewport} from "./utils";
 import {getAddressBarHeight} from "./address-bar";
+
 // todo: view/document not return to default state with indicate()
 export function initSizing(context){
-    context.add(
-        {
+    context.addStat({
             separator: true,
             slug: 'viewport',
             label: 'Viewport: [value]',
@@ -11,14 +11,14 @@ export function initSizing(context){
         }
     );
 
-    context.add({
+    context.addStat({
         slug: 'document',
         label: 'Document: [value]',
         value: () => `${context.indicate(document.body.clientWidth, 'clientWidth')}/${context.indicate(document.body.clientHeight, 'clientHeight')}`
     });
 
     let addressBarSize = 0;
-    context.add({
+    context.addStat({
         slug: 'address-bar',
         label: 'Address bar: [value]',
         value: () => {
