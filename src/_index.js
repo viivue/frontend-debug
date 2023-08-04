@@ -2,8 +2,9 @@ import {getUrlParam, scroll, round, viewport, setCSS} from "./utils";
 import {generateHTML} from "./layout";
 import {getDiffTime, getRealTime} from "./upTime";
 import {browserObj} from "./browser";
-import {scrollObject} from "./scroll";
+import {initScroll, scrollObject} from "./scroll";
 import {getAddressBarHeight} from "./address-bar";
+import {initSizing} from "@/sizing";
 
 const packageInfo = require('../package.json');
 
@@ -19,133 +20,65 @@ class FrontEndDebug{
         // data
         this.packageInfo = packageInfo;
         this.lastScrollPosition = scroll().top;
-        this.maxSpeed = 0;
-        this.lastSpeed = 0;
-        this.averageSpeed = 0;
-
-        this.lastSpeedCount = 0;
-        this.lastSpeedTotal = 0;
 
         this.memory = {};
         this.indicateTime = parseInt(getUrlParam('debug')) || parseInt(sessionStorage.getItem("FrontEndDebugIndicateTime")) || 500;
         sessionStorage.setItem("FrontEndDebugIndicateTime", this.indicateTime);
 
-        this.addressBarSize = 0;
 
-        this.stats = [
-            {
-                slug: 'scroll',
-                label: 'Scroll: [value]',
-                value: () => {
-                    const direction = this.lastScrollPosition > scroll().top ? '⏫' : '⏬';
-                    const progress = round(scroll().top / (document.body.clientHeight - viewport().h), 3);
-                    return `${this.indicate(round(scroll().top), 'scrollAmount')} ${direction} ${this.indicate(progress, 'progress')}`;
-                }
-            },
-            {
-                separator: true,
-                slug: 'speed',
-                label: 'Speed: [value]',
-                value: () => {
-                    this.lastSpeed = Math.abs(this.lastScrollPosition - scroll().top);
+        this.stats = [];
 
-                    // for avg. speed
-                    this.lastSpeedCount++;
-                    this.lastSpeedTotal += this.lastSpeed;
 
-                    return this.indicate(round(this.lastSpeed), 'lastSpeed');
-                }
-            },
-            {
-                slug: 'average-speed',
-                label: 'Avg. speed: [value]',
-                value: () => {
-                    // only update if changes
-                    if(this.lastScrollPosition !== scroll().top){
-                        this.averageSpeed = this.lastSpeedTotal / this.lastSpeedCount;
-                    }
+        // this.stats = [
+        //     // {
+        //     //     separator: true,
+        //     //     slug: 'time',
+        //     //     label: 'Uptime: [value]',
+        //     //     value: () => `${getDiffTime(Date.now())}`,
+        //     // },
+        //     {
+        //         separator: true,
+        //         slug: 'on-this-page',
+        //         label: 'On this page: [value]',
+        //         value: () => `${getRealTime(Date.now())}`,
+        //     },
+        //     // {
+        //     //     separator: true,
+        //     //     slug: 'IP',
+        //     //     label: 'IP: [value]',
+        //     //     value: () => browserObj.getIpAddress(),
+        //     //     isNotChange: true,
+        //     // },
+        //     {
+        //         separator: true,
+        //         slug: 'user-agent',
+        //         label: 'UserAgent: [value]',
+        //         value: () => browserObj.getUserAgent,
+        //         isNotChange: true,
+        //     },
+        //     {
+        //         slug: 'HTML-class',
+        //         label: 'HTML class: [value]',
+        //         value: () => browserObj.getHTMLClass,
+        //         isNotChange: true,
+        //     },
+        //     {
+        //         slug: 'body-class',
+        //         label: 'Body class: [value]',
+        //         value: () => browserObj.getBodyClass,
+        //         isNotChange: true,
+        //     },
+        //     {
+        //         separator: true,
+        //         slug: 'scroll-bottom',
+        //         label: 'Scroll to bottom: [value]',
+        //         value: () => `${scrollObject.scroll(2, 'Slow')} - ${scrollObject.scroll(10, 'Normal')} - ${scrollObject.scroll(20, 'Fast')}`,
+        //         isNotChange: true,
+        //     }
+        // ];
 
-                    return this.indicate(round(this.averageSpeed), 'averageSpeed');
-                }
-            },
-            {
-                slug: 'max-speed',
-                label: 'Max speed: [value]',
-                value: () => {
-                    this.maxSpeed = Math.max(this.maxSpeed, this.lastSpeed);
-                    return this.indicate(round(this.maxSpeed), 'maxSpeed');
-                }
-            },
-            {
-                separator: true,
-                slug: 'viewport',
-                label: 'Viewport: [value]',
-                value: () => `${this.indicate(viewport().w, 'viewportWidth')}/${this.indicate(viewport().h, 'viewportHeight')}`
-            },
-
-            {
-                slug: 'document',
-                label: 'Document: [value]',
-                value: () => `${this.indicate(document.body.clientWidth, 'clientWidth')}/${this.indicate(document.body.clientHeight, 'clientHeight')}`
-            },
-            {
-                slug: 'address-bar',
-                label: 'Address bar: [value]',
-                value: () => {
-                    const newAddressBarHeight = getAddressBarHeight();
-                    if(newAddressBarHeight > this.addressBarSize){
-                        this.addressBarSize = newAddressBarHeight;
-                    }
-
-                    return this.addressBarSize;
-                }
-            },
-            // {
-            //     separator: true,
-            //     slug: 'time',
-            //     label: 'Uptime: [value]',
-            //     value: () => `${getDiffTime(Date.now())}`,
-            // },
-            {
-                separator: true,
-                slug: 'on-this-page',
-                label: 'On this page: [value]',
-                value: () => `${getRealTime(Date.now())}`,
-            },
-            // {
-            //     separator: true,
-            //     slug: 'IP',
-            //     label: 'IP: [value]',
-            //     value: () => browserObj.getIpAddress(),
-            //     isNotChange: true,
-            // },
-            {
-                separator: true,
-                slug: 'user-agent',
-                label: 'UserAgent: [value]',
-                value: () => browserObj.getUserAgent,
-                isNotChange: true,
-            },
-            {
-                slug: 'HTML-class',
-                label: 'HTML class: [value]',
-                value: () => browserObj.getHTMLClass,
-                isNotChange: true,
-            },
-            {
-                slug: 'body-class',
-                label: 'Body class: [value]',
-                value: () => browserObj.getBodyClass,
-                isNotChange: true,
-            },
-            {
-                separator: true,
-                slug: 'scroll-bottom',
-                label: 'Scroll to bottom: [value]',
-                value: () => `${scrollObject.scroll(2, 'Slow')} - ${scrollObject.scroll(10, 'Normal')} - ${scrollObject.scroll(20, 'Fast')}`,
-                isNotChange: true,
-            }
-        ];
+        initScroll(this);
+        initSizing(this);
 
         // HTML
         generateHTML(this);
@@ -153,6 +86,7 @@ class FrontEndDebug{
         // update using rAF
         const onUpdate = () => {
             this.updateStats();
+            this.lastScrollPosition = scroll().top;
             window.requestAnimationFrame(onUpdate);
         };
         window.requestAnimationFrame(onUpdate);
@@ -172,6 +106,10 @@ class FrontEndDebug{
                 minWidth: 'unset'
             });
         });
+    }
+
+    add(obj){
+        this.stats.push(obj);
     }
 
     /**
