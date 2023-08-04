@@ -1,6 +1,6 @@
 import {viewport} from "./utils";
 import {getAddressBarHeight} from "./address-bar";
-
+// todo: view/document not return to default state with indicate()
 export function initSizing(context){
     context.add(
         {

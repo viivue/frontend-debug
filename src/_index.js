@@ -1,11 +1,10 @@
-import {getUrlParam, scroll, round, viewport, setCSS} from "./utils";
+import {getUrlParam, scroll} from "./utils";
 import {generateHTML} from "./layout";
-import {getDiffTime, getRealTime} from "./upTime";
-import {browserObj, initBrowser} from "./browser";
-import {initScroll, scrollObject} from "./scroll";
-import {getAddressBarHeight} from "./address-bar";
-import {initSizing} from "@/sizing";
-import {initTiming} from "@/timing";
+import {initBrowser} from "./browser";
+import {initScroll} from "./scroll";
+import {initSizing} from "./sizing";
+import {initTiming} from "./timing";
+import {styleButton} from "./styling";
 
 const packageInfo = require('../package.json');
 
@@ -20,13 +19,14 @@ class FrontEndDebug{
 
         // data
         this.packageInfo = packageInfo;
-        this.lastScrollPosition = scroll().top;
+        this.lastScrollPosition = scroll().top; // todo: move to scroll.js if possible
 
         this.memory = {};
         this.indicateTime = parseInt(getUrlParam('debug')) || parseInt(sessionStorage.getItem("FrontEndDebugIndicateTime")) || 500;
         sessionStorage.setItem("FrontEndDebugIndicateTime", this.indicateTime);
+        // todo: check if PiaJs is in-use
 
-
+        // store stats info
         this.stats = [];
 
         initScroll(this);
@@ -45,21 +45,10 @@ class FrontEndDebug{
         };
         window.requestAnimationFrame(onUpdate);
 
-
-        // button style
-        this.debugContainer.querySelectorAll('[data-fe-debug] button').forEach(node => {
-            setCSS(node, {
-                backgroundColor: 'transparent',
-                color: '#fff',
-                cursor: 'pointer',
-                textDecoration: 'underline',
-                padding: 0,
-                margin: 0,
-                fontSize: '12px',
-                width: 'auto',
-                minWidth: 'unset'
-            });
-        });
+        // default button style
+        setTimeout(() => {
+            styleButton(this.debugContainer.querySelectorAll('[data-fe-debug] button'));
+        }, 0);
     }
 
     add(obj){

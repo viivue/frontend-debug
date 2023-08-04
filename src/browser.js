@@ -1,48 +1,39 @@
-import {getElementProperty} from "./utils";
-import {scrollObject} from "@/scroll";
-
-let ip = '';
+//let ip = '';
 
 /**
  * Get browser IP from API
  * @returns {*}
  */
-const getBrowserIp = async() => {
-    try{
-        const response = await fetch('https://api.ipify.org/?format=json');
-        if(!response.ok){
-            ip = 'Failed to get current IP!';
-            return;
-        }
-        const {ip: fetchIp} = await response.json();
-        ip = fetchIp;
-    }catch(e){
-        ip = 'Failed to get current IP!';
-    }
-};
+// const getBrowserIp = async() => {
+//     try{
+//         const response = await fetch('https://api.ipify.org/?format=json');
+//         if(!response.ok){
+//             ip = 'Failed to get current IP!';
+//             return;
+//         }
+//         const {ip: fetchIp} = await response.json();
+//         ip = fetchIp;
+//     }catch(e){
+//         ip = 'Failed to get current IP!';
+//     }
+// };
 
 
 /**
  * Get and return browser user-agent
  * @returns {string}
  */
-const getBrowserUserAgent = () => navigator.userAgent;
-const getHTMLClassElement = () => document.querySelector('html').getAttribute('class');
-const getBodyClassElement = () => document.querySelector('body').getAttribute('class');
-
-window.getElementProperty = getElementProperty;
-
-export const browserObj = {
-    getIpAddress: () => {
-        if(!ip){
-            getBrowserIp();
-            return undefined;
-        }
-        return ip;
-    },
-    getUserAgent: getBrowserUserAgent(),
-    getHTMLClass: getHTMLClassElement(),
-    getBodyClass: getBodyClassElement(),
+const browserObj = {
+    // getIpAddress: () => {
+    //     if(!ip){
+    //         getBrowserIp();
+    //         return undefined;
+    //     }
+    //     return ip;
+    // },
+    getUserAgent: navigator.userAgent,
+    getHTMLClass: () => document.querySelector('html').getAttribute('class'),
+    getBodyClass: () => document.querySelector('body').getAttribute('class'),
 };
 
 
@@ -76,12 +67,4 @@ export function initBrowser(context){
     //     value: () => browserObj.getIpAddress(),
     //     isNotChange: true,
     // });
-
-    context.add({
-        separator: true,
-        slug: 'scroll-bottom',
-        label: 'Scroll to bottom: [value]',
-        value: () => `${scrollObject.scroll(2, 'Slow')} - ${scrollObject.scroll(10, 'Normal')} - ${scrollObject.scroll(20, 'Fast')}`,
-        isNotChange: true,
-    });
 }

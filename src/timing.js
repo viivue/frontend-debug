@@ -1,4 +1,4 @@
-import {getDiffTime, getRealTime} from "@/upTime";
+import {getDiffTime, getRealTime} from "./upTime";
 
 export function initTiming(context){
     context.add({
@@ -7,6 +7,7 @@ export function initTiming(context){
         label: 'On this page: [value]',
         value: () => `${getRealTime(Date.now())}`,
     });
+
     context.add({
         slug: 'time',
         label: 'Uptime: [value]',

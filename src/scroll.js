@@ -23,7 +23,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-export const scrollObject = {
+const scrollObject = {
     scroll: (v, title) => `<button onclick="scrollBottom(${v})">${title}</button>`,
 };
 
@@ -58,8 +58,6 @@ export function initScroll(context){
             lastSpeedCount++;
             lastSpeedTotal += lastSpeed;
 
-            console.log('lastSpeed', context.lastScrollPosition, scroll().top)
-
             return context.indicate(round(lastSpeed), 'lastSpeed');
         }
     });
@@ -85,5 +83,13 @@ export function initScroll(context){
             maxSpeed = Math.max(maxSpeed, lastSpeed);
             return context.indicate(round(maxSpeed), 'maxSpeed');
         }
+    });
+
+    context.add({
+        separator: true,
+        slug: 'scroll-bottom',
+        label: 'Scroll to bottom: [value]',
+        value: () => `${scrollObject.scroll(2, 'Slow')} - ${scrollObject.scroll(10, 'Normal')} - ${scrollObject.scroll(20, 'Fast')}`,
+        isNotChange: true,
     });
 }

@@ -67,13 +67,24 @@ export function arraySortInteger(array, asc = true){
 
 /**
  * Set CSS
- * @param target
+ * @param el
  * @param props
  */
-export function setCSS(target, props){
-    Object.assign(target.style, props);
+export function setCSS(el, props){
+    (el.length ? el : [el]).forEach(item => item && item.style ? Object.assign(item.style, props) : '');
 }
 
+export function hasClass(el, className){
+    el.classList.contains(className);
+}
+
+export function addClass(el, className){
+    (el.length ? el : [el]).forEach(item => item?.classList.add(className));
+}
+
+export function removeClass(el, className){
+    (el.length ? el : [el]).forEach(item => item?.classList.remove(className));
+}
 
 /**
  * Console log
@@ -142,24 +153,6 @@ export const getUrlParam = (param, url = window.location.href) => {
 export const append = (element, html) => {
     element.insertAdjacentHTML('beforeend', html);
 };
-
-/**
- * Get property from an element
- * @param element
- * @param property
- * @param callback
- * @returns {string}
- */
-export let getElementProperty = (element, property, callback) => {
-    let newElement = element;
-    if(typeof element === 'string'){
-        newElement = document.querySelector(element);
-    }
-    if(!newElement) return `Element doesn't exist!`;
-
-    // Deal with callback
-    callback(newElement.getAttribute(property));
-}
 
 
 /**
