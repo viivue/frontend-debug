@@ -1,4 +1,5 @@
 import {getElementProperty} from "./utils";
+import {scrollObject} from "@/scroll";
 
 let ip = '';
 
@@ -43,3 +44,44 @@ export const browserObj = {
     getHTMLClass: getHTMLClassElement(),
     getBodyClass: getBodyClassElement(),
 };
+
+
+export function initBrowser(context){
+    context.add({
+        separator: true,
+        slug: 'user-agent',
+        label: 'UserAgent: [value]',
+        value: () => browserObj.getUserAgent,
+        isNotChange: true,
+    });
+
+    context.add({
+        slug: 'HTML-class',
+        label: 'HTML class: [value]',
+        value: () => browserObj.getHTMLClass,
+        isNotChange: true,
+    });
+
+    context.add({
+        slug: 'body-class',
+        label: 'Body class: [value]',
+        value: () => browserObj.getBodyClass,
+        isNotChange: true,
+    });
+
+    // context.add({
+    //     separator: true,
+    //     slug: 'IP',
+    //     label: 'IP: [value]',
+    //     value: () => browserObj.getIpAddress(),
+    //     isNotChange: true,
+    // });
+
+    context.add({
+        separator: true,
+        slug: 'scroll-bottom',
+        label: 'Scroll to bottom: [value]',
+        value: () => `${scrollObject.scroll(2, 'Slow')} - ${scrollObject.scroll(10, 'Normal')} - ${scrollObject.scroll(20, 'Fast')}`,
+        isNotChange: true,
+    });
+}

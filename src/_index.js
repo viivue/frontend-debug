@@ -1,10 +1,11 @@
 import {getUrlParam, scroll, round, viewport, setCSS} from "./utils";
 import {generateHTML} from "./layout";
 import {getDiffTime, getRealTime} from "./upTime";
-import {browserObj} from "./browser";
+import {browserObj, initBrowser} from "./browser";
 import {initScroll, scrollObject} from "./scroll";
 import {getAddressBarHeight} from "./address-bar";
 import {initSizing} from "@/sizing";
+import {initTiming} from "@/timing";
 
 const packageInfo = require('../package.json');
 
@@ -28,57 +29,10 @@ class FrontEndDebug{
 
         this.stats = [];
 
-
-        // this.stats = [
-        //     // {
-        //     //     separator: true,
-        //     //     slug: 'time',
-        //     //     label: 'Uptime: [value]',
-        //     //     value: () => `${getDiffTime(Date.now())}`,
-        //     // },
-        //     {
-        //         separator: true,
-        //         slug: 'on-this-page',
-        //         label: 'On this page: [value]',
-        //         value: () => `${getRealTime(Date.now())}`,
-        //     },
-        //     // {
-        //     //     separator: true,
-        //     //     slug: 'IP',
-        //     //     label: 'IP: [value]',
-        //     //     value: () => browserObj.getIpAddress(),
-        //     //     isNotChange: true,
-        //     // },
-        //     {
-        //         separator: true,
-        //         slug: 'user-agent',
-        //         label: 'UserAgent: [value]',
-        //         value: () => browserObj.getUserAgent,
-        //         isNotChange: true,
-        //     },
-        //     {
-        //         slug: 'HTML-class',
-        //         label: 'HTML class: [value]',
-        //         value: () => browserObj.getHTMLClass,
-        //         isNotChange: true,
-        //     },
-        //     {
-        //         slug: 'body-class',
-        //         label: 'Body class: [value]',
-        //         value: () => browserObj.getBodyClass,
-        //         isNotChange: true,
-        //     },
-        //     {
-        //         separator: true,
-        //         slug: 'scroll-bottom',
-        //         label: 'Scroll to bottom: [value]',
-        //         value: () => `${scrollObject.scroll(2, 'Slow')} - ${scrollObject.scroll(10, 'Normal')} - ${scrollObject.scroll(20, 'Fast')}`,
-        //         isNotChange: true,
-        //     }
-        // ];
-
         initScroll(this);
         initSizing(this);
+        initTiming(this);
+        initBrowser(this);
 
         // HTML
         generateHTML(this);
