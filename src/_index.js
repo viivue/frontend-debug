@@ -1,3 +1,4 @@
+import {EventsManager} from "@phucbm/os-util";
 import {getUrlParam, scroll} from "./utils";
 import {generateHTML} from "./layout";
 import {initBrowser} from "./browser";
@@ -5,6 +6,7 @@ import {initScroll} from "./scroll";
 import {initSizing} from "./sizing";
 import {initTiming} from "./timing";
 import {styleButton} from "./styling";
+import {fireRaf} from "./fire-events";
 
 const packageInfo = require('../package.json');
 
@@ -16,6 +18,11 @@ class FrontEndDebug{
         // validate
         this.debugContainer = document.querySelectorAll('#fe-debug');
         if(!this.validate()) return false;
+
+        // init events manager
+        this.events = new EventsManager(this, {
+            names: ['onRaf'] // register event names
+        });
 
         // data
         this.packageInfo = packageInfo;
@@ -37,18 +44,26 @@ class FrontEndDebug{
         // HTML
         generateHTML(this);
 
-        // update using rAF
-        const onUpdate = () => {
+        // fire events
+        fireRaf(this);
+
+        // assign event todo: make this available for each row data
+        this.on('raf', () => {
             this.updateStats();
             this.lastScrollPosition = scroll().top;
-            window.requestAnimationFrame(onUpdate);
-        };
-        window.requestAnimationFrame(onUpdate);
+        });
 
-        // default button style
+        // default button style todo: remove this setTimeOut if possible
         setTimeout(() => {
             styleButton(this.debugContainer.querySelectorAll('[data-fe-debug] button'));
         }, 0);
+    }
+
+    /**
+     * Assign late-events
+     */
+    on(eventName, callback){
+        this.events.add(eventName, callback);
     }
 
     add(obj){
