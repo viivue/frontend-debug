@@ -3,22 +3,22 @@ import {getAddressBarHeight} from "./address-bar";
 
 // todo: view/document not return to default state with indicate()
 export function initSizing(context){
-    context.addStat({
+    context.addRecord({
             separator: true,
             slug: 'viewport',
             label: 'Viewport: [value]',
-            value: () => `${context.indicate(viewport().w, 'viewportWidth')}/${context.indicate(viewport().h, 'viewportHeight')}`
+            value: () => `${context.indicate(viewport().w, 'viewportWidth', 'viewport')}/${context.indicate(viewport().h, 'viewportHeight', 'viewport')}`
         }
     );
 
-    context.addStat({
+    context.addRecord({
         slug: 'document',
         label: 'Document: [value]',
-        value: () => `${context.indicate(document.body.clientWidth, 'clientWidth')}/${context.indicate(document.body.clientHeight, 'clientHeight')}`
+        value: () => `${context.indicate(document.body.clientWidth, 'clientWidth', 'document')}/${context.indicate(document.body.clientHeight, 'clientHeight', 'document')}`
     });
 
     let addressBarSize = 0;
-    context.addStat({
+    context.addRecord({
         slug: 'address-bar',
         label: 'Address bar: [value]',
         value: () => {

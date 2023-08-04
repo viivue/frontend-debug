@@ -37,17 +37,18 @@ export function initScroll(context){
     let lastSpeedTotal = 0;
 
 
-    context.addStat({
+    context.addRecord({
         slug: 'scroll',
         label: 'Scroll: [value]',
         value: () => {
             const direction = context.lastScrollPosition > scroll().top ? '⏫' : '⏬';
             const progress = round(scroll().top / (document.body.clientHeight - viewport().h), 3);
-            return `${context.indicate(round(scroll().top), 'scrollAmount')} ${direction} ${context.indicate(progress, 'progress')}`;
-        }
+            return `${context.indicate(round(scroll().top), 'scrollAmount', 'scroll')} ${direction} ${context.indicate(progress, 'progress', 'scroll')}`;
+        },
+        on: ['scroll']
     });
 
-    context.addStat({
+    context.addRecord({
         separator: true,
         slug: 'speed',
         label: 'Speed: [value]',
@@ -58,11 +59,12 @@ export function initScroll(context){
             lastSpeedCount++;
             lastSpeedTotal += lastSpeed;
 
-            return context.indicate(round(lastSpeed), 'lastSpeed');
-        }
+            return context.indicate(round(lastSpeed), 'lastSpeed', 'speed');
+        },
+        on: ['scroll']
     });
 
-    context.addStat({
+    context.addRecord({
         slug: 'average-speed',
         label: 'Avg. speed: [value]',
         value: () => {
@@ -71,20 +73,22 @@ export function initScroll(context){
                 averageSpeed = lastSpeedTotal / lastSpeedCount;
             }
 
-            return context.indicate(round(averageSpeed), 'averageSpeed');
-        }
+            return context.indicate(round(averageSpeed), 'averageSpeed', 'average-speed');
+        },
+        on: ['raf']
     });
 
-    context.addStat({
+    context.addRecord({
         slug: 'max-speed',
         label: 'Max speed: [value]',
         value: () => {
             maxSpeed = Math.max(maxSpeed, lastSpeed);
-            return context.indicate(round(maxSpeed), 'maxSpeed');
-        }
+            return context.indicate(round(maxSpeed), 'maxSpeed', 'max-speed');
+        },
+        on: ['scroll']
     });
 
-    context.addStat({
+    context.addRecord({
         separator: true,
         slug: 'scroll-bottom',
         label: 'Scroll to bottom: [value]',

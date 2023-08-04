@@ -12,7 +12,8 @@ export function generateHTML(context){
     context.debugContainer = document.querySelector('#fe-debug');
 
     // append stats
-    for(const item of context.stats){
+    for(const record of context.stats){
+        const item = record.options;
         const stats = context.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`);
         if(!stats.length){
             // append new

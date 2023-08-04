@@ -7,3 +7,10 @@ export function fireRaf(context){
     };
     window.requestAnimationFrame(onUpdate);
 }
+
+
+export function fireScroll(context){
+    window.addEventListener('scroll', () => {
+        context.events.fire('onScroll');
+    });
+}

@@ -38,7 +38,7 @@ const browserObj = {
 
 
 export function initBrowser(context){
-    context.addStat({
+    context.addRecord({
         separator: true,
         slug: 'user-agent',
         label: 'UserAgent: [value]',
@@ -46,21 +46,21 @@ export function initBrowser(context){
         isNotChange: true,
     });
 
-    context.addStat({
+    context.addRecord({
         slug: 'HTML-class',
         label: 'HTML class: [value]',
         value: () => browserObj.getHTMLClass,
         isNotChange: true,
     });
 
-    context.addStat({
+    context.addRecord({
         slug: 'body-class',
         label: 'Body class: [value]',
         value: () => browserObj.getBodyClass,
         isNotChange: true,
     });
 
-    // context.addStat({
+    // context.addRecord({
     //     separator: true,
     //     slug: 'IP',
     //     label: 'IP: [value]',

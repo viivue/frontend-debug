@@ -6,7 +6,8 @@ import {initScroll} from "./scroll";
 import {initSizing} from "./sizing";
 import {initTiming} from "./timing";
 import {styleButton} from "./styling";
-import {fireRaf} from "./fire-events";
+import {fireRaf, fireScroll} from "./fire-events";
+import {Record} from "@/class-record";
 
 const packageInfo = require('../package.json');
 
@@ -21,7 +22,7 @@ class FrontEndDebug{
 
         // init events manager
         this.events = new EventsManager(this, {
-            names: ['onRaf'] // register event names
+            names: ['onRaf', 'onScroll'] // register event names
         });
 
         // data
@@ -46,10 +47,10 @@ class FrontEndDebug{
 
         // fire events
         fireRaf(this);
+        fireScroll(this);
 
-        // assign event todo: make this available for each row data
+        // assign event
         this.on('raf', () => {
-            this.updateStats([...this.stats]);
             this.lastScrollPosition = scroll().top;
         });
 
@@ -66,15 +67,19 @@ class FrontEndDebug{
         this.events.add(eventName, callback);
     }
 
-    addStat(obj){
-        this.stats.push(obj);
+    addRecord(options){
+        this.stats.push(new Record(this, options));
+    }
+
+    getRecord(key){
+        return this.stats.filter(rec => rec.key === key)[0];
     }
 
     /**
      * Indicate
      * Detect and return old/new value between each frame reset (rAF)
      */
-    indicate(value, key){
+    indicate(value, key, recKey = ''){
         const newValue = value => `<span style="color:#96cdff">${value}</span>`;
 
         if(typeof this.memory[key] === 'undefined'){
@@ -84,46 +89,23 @@ class FrontEndDebug{
             // found
             if(this.memory[key].value === value){
                 // same value
-                return this.memory[key].isNew ? newValue(value) : value;
+                return value;
             }
         }
 
 
         // update value
         this.memory[key].value = value;
-        this.memory[key].isNew = true;
 
         // setTimeout
         clearTimeout(this.memory[key].timeout);
         this.memory[key].timeout = setTimeout(() => {
-            this.memory[key].isNew = false;
+            // reset highlight
+            const rec = this.getRecord(recKey);
+            rec.resetValue();
         }, this.indicateTime);
 
         return newValue(value);
-    }
-
-    /**
-     * Update stats of each value when frame reset
-     */
-    updateStats(stats){
-        stats.forEach((item, index, arr) => {
-            const value = item.value();
-
-            this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`).forEach(node => {
-                if(value === item.oldValue) return;
-
-                // Render new value
-                node.innerHTML = item.label.replace('[value]', value);
-
-                // assign value for the next checking
-                item.oldValue = value;
-            });
-
-            /* If stat doesn't need to update and already has value => remove */
-            //if(item.isNotChange && value) arr.splice(index);
-        });
-
-        this.lastScrollPosition = scroll().top;
     }
 
 
