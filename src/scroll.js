@@ -73,8 +73,7 @@ export function initScroll(context){
 
             return context.indicate(round(averageSpeed), 'averageSpeed');
         }
-        }
-    );
+    });
 
     context.addStat({
         slug: 'max-speed',

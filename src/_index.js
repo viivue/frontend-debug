@@ -49,7 +49,7 @@ class FrontEndDebug{
 
         // assign event todo: make this available for each row data
         this.on('raf', () => {
-            this.updateStats();
+            this.updateStats([...this.stats]);
             this.lastScrollPosition = scroll().top;
         });
 
@@ -105,8 +105,8 @@ class FrontEndDebug{
     /**
      * Update stats of each value when frame reset
      */
-    updateStats(){
-        this.stats.forEach((item, index, arr) => {
+    updateStats(stats){
+        stats.forEach((item, index, arr) => {
             const value = item.value();
 
             this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`).forEach(node => {
@@ -120,7 +120,7 @@ class FrontEndDebug{
             });
 
             /* If stat doesn't need to update and already has value => remove */
-            if(item.isNotChange && value) arr.splice(index);
+            //if(item.isNotChange && value) arr.splice(index);
         });
 
         this.lastScrollPosition = scroll().top;
