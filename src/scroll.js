@@ -41,9 +41,9 @@ export function initScroll(context){
         slug: 'scroll',
         label: 'Scroll: [value]',
         ref: {
-            'scrollAmount': () => round(scroll().top),
+            'scrollAmount': () => `${round(scroll().top)}px`,
             'direction': () => context.lastScrollPosition > scroll().top ? '⏫' : '⏬',
-            'progress': () => round(scroll().top / (document.body.clientHeight - viewport().h), 3)
+            'progress': () => `${round(scroll().top / (document.body.clientHeight - viewport().h) * 100, 2)}%`
         },
         value: `{scrollAmount} {direction} {progress}`,
         on: ['scroll']
