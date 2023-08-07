@@ -1,4 +1,10 @@
-export function fireRaf(context){
+export function setupEventsFire(context){
+    fireRaf(context);
+    fireScroll(context);
+    fireResize(context);
+}
+
+function fireRaf(context){
     // update using rAF
     const onUpdate = () => {
         // fire an event
@@ -9,8 +15,14 @@ export function fireRaf(context){
 }
 
 
-export function fireScroll(context){
+function fireScroll(context){
     window.addEventListener('scroll', () => {
         context.events.fire('onScroll');
+    });
+}
+
+function fireResize(context){
+    window.addEventListener('resize', () => {
+        context.events.fire('onResize');
     });
 }

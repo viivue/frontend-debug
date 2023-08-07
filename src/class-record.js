@@ -19,21 +19,12 @@ export class Record{
         this.key = this.options.slug;
 
 
-        // on raf
-        if(this.options.on && this.options.on.includes('raf')){
-            console.log('init raf', this)
-            context.on('raf', () => {
+        // run update by events
+        this.options.on.forEach(type => {
+            context.on(type, () => {
                 this.updateStats();
             });
-        }
-
-        // on scroll
-        if(this.options.on && this.options.on.includes('scroll')){
-            console.log('init scroll', this.options)
-            context.on('scroll', () => {
-                this.updateStats();
-            });
-        }
+        });
     }
 
     resetValue(){

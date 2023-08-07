@@ -7,14 +7,16 @@ export function initSizing(context){
             separator: true,
             slug: 'viewport',
             label: 'Viewport: [value]',
-            value: () => `${context.indicate(viewport().w, 'viewportWidth', 'viewport')}/${context.indicate(viewport().h, 'viewportHeight', 'viewport')}`
+            value: () => `${context.indicate(viewport().w, 'viewportWidth', 'viewport')}/${context.indicate(viewport().h, 'viewportHeight', 'viewport')}`,
+            on: ['resize']
         }
     );
 
     context.addRecord({
         slug: 'document',
         label: 'Document: [value]',
-        value: () => `${context.indicate(document.body.clientWidth, 'clientWidth', 'document')}/${context.indicate(document.body.clientHeight, 'clientHeight', 'document')}`
+        value: () => `${context.indicate(document.body.clientWidth, 'clientWidth', 'document')}/${context.indicate(document.body.clientHeight, 'clientHeight', 'document')}`,
+        on: ['resize']
     });
 
     let addressBarSize = 0;
@@ -29,6 +31,7 @@ export function initSizing(context){
 
             // todo: update on scroll
             return addressBarSize;
-        }
+        },
+        on: ['resize']
     });
 }

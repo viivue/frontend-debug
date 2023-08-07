@@ -6,8 +6,8 @@ import {initScroll} from "./scroll";
 import {initSizing} from "./sizing";
 import {initTiming} from "./timing";
 import {styleButton} from "./styling";
-import {fireRaf, fireScroll} from "./fire-events";
-import {Record} from "@/class-record";
+import {setupEventsFire} from "./fire-events";
+import {Record} from "./class-record";
 
 const packageInfo = require('../package.json');
 
@@ -22,7 +22,7 @@ class FrontEndDebug{
 
         // init events manager
         this.events = new EventsManager(this, {
-            names: ['onRaf', 'onScroll'] // register event names
+            names: ['onRaf', 'onScroll', 'onResize'] // register event names
         });
 
         // data
@@ -46,8 +46,7 @@ class FrontEndDebug{
         generateHTML(this);
 
         // fire events
-        fireRaf(this);
-        fireScroll(this);
+        setupEventsFire(this);
 
         // assign event
         this.on('raf', () => {
