@@ -1,9 +1,13 @@
-import {getUrlParam, scroll, round, viewport, setCSS} from "./utils";
-import {generateHTML} from "./layout";
-import {getDiffTime, getRealTime} from "./upTime";
-import {browserObj} from "./browser";
-import {scrollObject} from "./scroll";
-import {getAddressBarHeight} from "./address-bar";
+import {EventsManager} from "@phucbm/os-util";
+import {getUrlParam, scroll} from "./utils";
+import {generateHTML, styling} from "./layout";
+import {initBrowser} from "./browser";
+import {initScroll} from "./scroll";
+import {initSizing} from "./sizing";
+import {initTiming} from "./timing";
+import {styleButton} from "./styling";
+import {setupEventsFire} from "./fire-events";
+import {Record} from "./class-record";
 
 const packageInfo = require('../package.json');
 
@@ -16,218 +20,56 @@ class FrontEndDebug{
         this.debugContainer = document.querySelectorAll('#fe-debug');
         if(!this.validate()) return false;
 
+        // init events manager
+        this.events = new EventsManager(this, {
+            names: ['onRaf', 'onScroll', 'onResize', 'onLoad'] // register event names
+        });
+
         // data
         this.packageInfo = packageInfo;
-        this.lastScrollPosition = scroll().top;
-        this.maxSpeed = 0;
-        this.lastSpeed = 0;
-        this.averageSpeed = 0;
+        this.lastScrollPosition = scroll().top; // todo: move to scroll.js if possible
 
-        this.lastSpeedCount = 0;
-        this.lastSpeedTotal = 0;
-
-        this.memory = {};
-        this.indicateTime = parseInt(getUrlParam('debug')) || parseInt(sessionStorage.getItem("FrontEndDebugIndicateTime")) || 500;
-        sessionStorage.setItem("FrontEndDebugIndicateTime", this.indicateTime);
-
-        this.addressBarSize = 0;
-
-        this.stats = [
-            {
-                slug: 'scroll',
-                label: 'Scroll: [value]',
-                value: () => {
-                    const direction = this.lastScrollPosition > scroll().top ? '⏫' : '⏬';
-                    const progress = round(scroll().top / (document.body.clientHeight - viewport().h), 3);
-                    return `${this.indicate(round(scroll().top), 'scrollAmount')} ${direction} ${this.indicate(progress, 'progress')}`;
-                }
-            },
-            {
-                separator: true,
-                slug: 'speed',
-                label: 'Speed: [value]',
-                value: () => {
-                    this.lastSpeed = Math.abs(this.lastScrollPosition - scroll().top);
-
-                    // for avg. speed
-                    this.lastSpeedCount++;
-                    this.lastSpeedTotal += this.lastSpeed;
-
-                    return this.indicate(round(this.lastSpeed), 'lastSpeed');
-                }
-            },
-            {
-                slug: 'average-speed',
-                label: 'Avg. speed: [value]',
-                value: () => {
-                    // only update if changes
-                    if(this.lastScrollPosition !== scroll().top){
-                        this.averageSpeed = this.lastSpeedTotal / this.lastSpeedCount;
-                    }
-
-                    return this.indicate(round(this.averageSpeed), 'averageSpeed');
-                }
-            },
-            {
-                slug: 'max-speed',
-                label: 'Max speed: [value]',
-                value: () => {
-                    this.maxSpeed = Math.max(this.maxSpeed, this.lastSpeed);
-                    return this.indicate(round(this.maxSpeed), 'maxSpeed');
-                }
-            },
-            {
-                separator: true,
-                slug: 'viewport',
-                label: 'Viewport: [value]',
-                value: () => `${this.indicate(viewport().w, 'viewportWidth')}/${this.indicate(viewport().h, 'viewportHeight')}`
-            },
-
-            {
-                slug: 'document',
-                label: 'Document: [value]',
-                value: () => `${this.indicate(document.body.clientWidth, 'clientWidth')}/${this.indicate(document.body.clientHeight, 'clientHeight')}`
-            },
-            {
-                slug: 'address-bar',
-                label: 'Address bar: [value]',
-                value: () => {
-                    const newAddressBarHeight = getAddressBarHeight();
-                    if(newAddressBarHeight > this.addressBarSize){
-                        this.addressBarSize = newAddressBarHeight;
-                    }
-
-                    return this.addressBarSize;
-                }
-            },
-            // {
-            //     separator: true,
-            //     slug: 'time',
-            //     label: 'Uptime: [value]',
-            //     value: () => `${getDiffTime(Date.now())}`,
-            // },
-            {
-                separator: true,
-                slug: 'on-this-page',
-                label: 'On this page: [value]',
-                value: () => `${getRealTime(Date.now())}`,
-            },
-            // {
-            //     separator: true,
-            //     slug: 'IP',
-            //     label: 'IP: [value]',
-            //     value: () => browserObj.getIpAddress(),
-            //     isNotChange: true,
-            // },
-            {
-                separator: true,
-                slug: 'user-agent',
-                label: 'UserAgent: [value]',
-                value: () => browserObj.getUserAgent,
-                isNotChange: true,
-            },
-            {
-                slug: 'HTML-class',
-                label: 'HTML class: [value]',
-                value: () => browserObj.getHTMLClass,
-                isNotChange: true,
-            },
-            {
-                slug: 'body-class',
-                label: 'Body class: [value]',
-                value: () => browserObj.getBodyClass,
-                isNotChange: true,
-            },
-            {
-                separator: true,
-                slug: 'scroll-bottom',
-                label: 'Scroll to bottom: [value]',
-                value: () => `${scrollObject.scroll(2, 'Slow')} - ${scrollObject.scroll(10, 'Normal')} - ${scrollObject.scroll(20, 'Fast')}`,
-                isNotChange: true,
-            }
-        ];
+        // store stats info
+        this.stats = [];
 
         // HTML
         generateHTML(this);
 
-        // update using rAF
-        const onUpdate = () => {
-            this.updateStats();
-            window.requestAnimationFrame(onUpdate);
-        };
-        window.requestAnimationFrame(onUpdate);
+        initScroll(this);
+        initSizing(this);
+        initTiming(this);
+        initBrowser(this);
 
+        // Styling
+        styling(this);
 
-        // button style
-        this.debugContainer.querySelectorAll('[data-fe-debug] button').forEach(node => {
-            setCSS(node, {
-                backgroundColor: 'transparent',
-                color: '#fff',
-                cursor: 'pointer',
-                textDecoration: 'underline',
-                padding: 0,
-                margin: 0,
-                fontSize: '12px',
-                width: 'auto',
-                minWidth: 'unset'
-            });
+        // fire events
+        setupEventsFire(this);
+
+        // assign event
+        this.on('raf', () => {
+            this.lastScrollPosition = scroll().top;
         });
+
+        // default button style todo: remove this setTimeOut if possible
+        setTimeout(() => {
+            styleButton(this.debugContainer.querySelectorAll('[data-fe-debug] button'));
+        }, 0);
     }
 
     /**
-     * Indicate
-     * Detect and return old/new value between each frame reset (rAF)
+     * Assign late-events
      */
-    indicate(value, key){
-        const newValue = value => `<span style="color:#96cdff">${value}</span>`;
-
-        if(typeof this.memory[key] === 'undefined'){
-            // create new
-            this.memory[key] = {};
-        }else{
-            // found
-            if(this.memory[key].value === value){
-                // same value
-                return this.memory[key].isNew ? newValue(value) : value;
-            }
-        }
-
-
-        // update value
-        this.memory[key].value = value;
-        this.memory[key].isNew = true;
-
-        // setTimeout
-        clearTimeout(this.memory[key].timeout);
-        this.memory[key].timeout = setTimeout(() => {
-            this.memory[key].isNew = false;
-        }, this.indicateTime);
-
-        return newValue(value);
+    on(eventName, callback){
+        this.events.add(eventName, callback);
     }
 
-    /**
-     * Update stats of each value when frame reset
-     */
-    updateStats(){
-        this.stats.forEach((item, index, arr) => {
-            const value = item.value();
+    addRecord(options){
+        this.stats.push(new Record(this, options));
+    }
 
-            this.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`).forEach(node => {
-                if(value === item.oldValue) return;
-
-                // Render new value
-                node.innerHTML = item.label.replace('[value]', value);
-
-                // assign value for the next checking
-                item.oldValue = value;
-            });
-
-            /* If stat doesn't need to update and already has value => remove */
-            if(item.isNotChange && value) arr.splice(index);
-        });
-
-        this.lastScrollPosition = scroll().top;
+    getRecord(key){
+        return this.stats.filter(rec => rec.key === key)[0];
     }
 
 
