@@ -10,24 +10,10 @@ export function generateHTML(context){
 
     append(document.querySelector('body'), `<div id="fe-debug" style="opacity:0;"><div class="head"><span>${context.packageInfo.prettyName} v${context.packageInfo.version}</span><button style="background-color:transparent">🔻</button></div></div>`);
     context.debugContainer = document.querySelector('#fe-debug');
+}
 
-    // append stats
-    for(const record of context.stats){
-        const item = record.options;
-        const stats = context.debugContainer.querySelectorAll(`[data-fe-debug="${item.slug}"]`);
-        if(!stats.length){
-            // append new
-            append(context.debugContainer, `<div style="display:none" data-fe-debug="${item.slug}">${item.label.replace('[value]', item.value())}</div>`);
-            const itemEl = context.debugContainer.querySelector(`[data-fe-debug="${item.slug}"]`);
 
-            // apply styling
-            if(typeof item.separator === 'boolean' && item.separator === true){
-                // separator with border top
-                itemEl.classList.add('sep');
-            }
-        }
-    }
-
+export function styling(context){
     /**
      * Styling
      */

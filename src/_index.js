@@ -1,6 +1,6 @@
 import {EventsManager} from "@phucbm/os-util";
 import {getUrlParam, scroll} from "./utils";
-import {generateHTML} from "./layout";
+import {generateHTML, styling} from "./layout";
 import {initBrowser} from "./browser";
 import {initScroll} from "./scroll";
 import {initSizing} from "./sizing";
@@ -37,13 +37,16 @@ class FrontEndDebug{
         // store stats info
         this.stats = [];
 
+        // HTML
+        generateHTML(this);
+
         initScroll(this);
         initSizing(this);
         initTiming(this);
         initBrowser(this);
 
-        // HTML
-        generateHTML(this);
+        // Styling
+        styling(this);
 
         // fire events
         setupEventsFire(this);
