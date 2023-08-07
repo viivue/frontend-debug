@@ -40,11 +40,12 @@ export function initScroll(context){
     context.addRecord({
         slug: 'scroll',
         label: 'Scroll: [value]',
-        value: () => {
-            const direction = context.lastScrollPosition > scroll().top ? '⏫' : '⏬';
-            const progress = round(scroll().top / (document.body.clientHeight - viewport().h), 3);
-            return `${context.indicate(round(scroll().top), 'scrollAmount', 'scroll')} ${direction} ${context.indicate(progress, 'progress', 'scroll')}`;
+        ref: {
+            'scrollAmount': () => round(scroll().top),
+            'direction': () => context.lastScrollPosition > scroll().top ? '⏫' : '⏬',
+            'progress': () => round(scroll().top / (document.body.clientHeight - viewport().h), 3)
         },
+        value: `{scrollAmount} {direction} {progress}`,
         on: ['scroll']
     });
 
@@ -52,39 +53,48 @@ export function initScroll(context){
         separator: true,
         slug: 'speed',
         label: 'Speed: [value]',
-        value: () => {
-            lastSpeed = Math.abs(context.lastScrollPosition - scroll().top);
+        ref: {
+            'speed': () => {
+                lastSpeed = Math.abs(context.lastScrollPosition - scroll().top);
 
-            // for avg. speed
-            lastSpeedCount++;
-            lastSpeedTotal += lastSpeed;
+                // for avg. speed
+                lastSpeedCount++;
+                lastSpeedTotal += lastSpeed;
 
-            return context.indicate(round(lastSpeed), 'lastSpeed', 'speed');
+                return round(lastSpeed);
+            }
         },
+        value: `{speed}`,
         on: ['scroll']
     });
 
     context.addRecord({
         slug: 'average-speed',
         label: 'Avg. speed: [value]',
-        value: () => {
-            // only update if changes
-            if(context.lastScrollPosition !== scroll().top){
-                averageSpeed = lastSpeedTotal / lastSpeedCount;
-            }
+        ref: {
+            'avg-speed': () => {
+                // only update if changes
+                if(context.lastScrollPosition !== scroll().top){
+                    averageSpeed = lastSpeedTotal / lastSpeedCount;
+                }
 
-            return context.indicate(round(averageSpeed), 'averageSpeed', 'average-speed');
+                return round(averageSpeed);
+            }
         },
+        value: '{avg-speed}',
         on: ['raf']
     });
 
     context.addRecord({
         slug: 'max-speed',
         label: 'Max speed: [value]',
-        value: () => {
-            maxSpeed = Math.max(maxSpeed, lastSpeed);
-            return context.indicate(round(maxSpeed), 'maxSpeed', 'max-speed');
+        ref: {
+            'max': () => {
+                maxSpeed = Math.max(maxSpeed, lastSpeed);
+                return round(maxSpeed);
+            }
         },
+        value: '{max}',
         on: ['scroll']
     });
 
@@ -93,6 +103,5 @@ export function initScroll(context){
         slug: 'scroll-bottom',
         label: 'Scroll to bottom: [value]',
         value: () => `${scrollObject.scroll(2, 'Slow')} - ${scrollObject.scroll(10, 'Normal')} - ${scrollObject.scroll(20, 'Fast')}`,
-        isNotChange: true,
     });
 }

@@ -1,7 +1,17 @@
 export function setupEventsFire(context){
     fireRaf(context);
-    fireScroll(context);
-    fireResize(context);
+
+    window.addEventListener('scroll', () => {
+        context.events.fire('onScroll');
+    });
+
+    window.addEventListener('resize', () => {
+        context.events.fire('onResize');
+    });
+
+    window.addEventListener('load', () => {
+        context.events.fire('onLoad');
+    });
 }
 
 function fireRaf(context){
@@ -12,17 +22,4 @@ function fireRaf(context){
         window.requestAnimationFrame(onUpdate);
     };
     window.requestAnimationFrame(onUpdate);
-}
-
-
-function fireScroll(context){
-    window.addEventListener('scroll', () => {
-        context.events.fire('onScroll');
-    });
-}
-
-function fireResize(context){
-    window.addEventListener('resize', () => {
-        context.events.fire('onResize');
-    });
 }

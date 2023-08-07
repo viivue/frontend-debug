@@ -43,21 +43,26 @@ export function initBrowser(context){
         slug: 'user-agent',
         label: 'UserAgent: [value]',
         value: () => browserObj.getUserAgent,
-        isNotChange: true,
     });
 
     context.addRecord({
         slug: 'HTML-class',
         label: 'HTML class: [value]',
-        value: () => browserObj.getHTMLClass,
-        isNotChange: true,
+        ref: {
+            'html-class': () => document.querySelector('html').getAttribute('class')
+        },
+        value: '{html-class}',
+        on: ['raf']
     });
 
     context.addRecord({
         slug: 'body-class',
         label: 'Body class: [value]',
-        value: () => browserObj.getBodyClass,
-        isNotChange: true,
+        ref: {
+            'body-class': () => document.querySelector('body').getAttribute('class')
+        },
+        value: '{body-class}',
+        on: ['raf']
     });
 
     // context.addRecord({

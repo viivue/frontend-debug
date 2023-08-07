@@ -22,17 +22,12 @@ class FrontEndDebug{
 
         // init events manager
         this.events = new EventsManager(this, {
-            names: ['onRaf', 'onScroll', 'onResize'] // register event names
+            names: ['onRaf', 'onScroll', 'onResize', 'onLoad'] // register event names
         });
 
         // data
         this.packageInfo = packageInfo;
         this.lastScrollPosition = scroll().top; // todo: move to scroll.js if possible
-
-        this.memory = {};
-        this.indicateTime = parseInt(getUrlParam('debug')) || parseInt(sessionStorage.getItem("FrontEndDebugIndicateTime")) || 500;
-        sessionStorage.setItem("FrontEndDebugIndicateTime", this.indicateTime);
-        // todo: check if PiaJs is in-use
 
         // store stats info
         this.stats = [];
@@ -75,39 +70,6 @@ class FrontEndDebug{
 
     getRecord(key){
         return this.stats.filter(rec => rec.key === key)[0];
-    }
-
-    /**
-     * Indicate
-     * Detect and return old/new value between each frame reset (rAF)
-     */
-    indicate(value, key, recKey = ''){
-        const newValue = value => `<span style="color:#96cdff">${value}</span>`;
-
-        if(typeof this.memory[key] === 'undefined'){
-            // create new
-            this.memory[key] = {};
-        }else{
-            // found
-            if(this.memory[key].value === value){
-                // same value
-                return value;
-            }
-        }
-
-
-        // update value
-        this.memory[key].value = value;
-
-        // setTimeout
-        clearTimeout(this.memory[key].timeout);
-        this.memory[key].timeout = setTimeout(() => {
-            // reset highlight
-            const rec = this.getRecord(recKey);
-            rec.resetValue();
-        }, this.indicateTime);
-
-        return newValue(value);
     }
 
 
