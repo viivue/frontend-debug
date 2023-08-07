@@ -33,15 +33,14 @@ export function initSizing(context){
         ref: {
             'addressBarSize': () => {
                 const newAddressBarHeight = getAddressBarHeight();
-                if(newAddressBarHeight > addressBarSize){
+                if(newAddressBarHeight !== addressBarSize){
                     addressBarSize = newAddressBarHeight;
                 }
 
-                // todo: update on scroll
                 return addressBarSize;
             }
         },
         value: `{addressBarSize}`,
-        on: ['resize', 'load']
+        on: ['load', 'scroll', 'resize']
     });
 }
