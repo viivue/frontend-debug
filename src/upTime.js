@@ -1,4 +1,4 @@
-import 'piajs';
+// import 'piajs';
 
 let currentTime = Date.now();
 let urlObj = {},
@@ -15,105 +15,105 @@ const realTime = Date.now();
  * Check if the page had accessed before
  * @returns boolean
  */
-const isLastAccessPage = () => {
-    urlStorageObj = Pia.get('FEDebugData');
-    if(!urlStorageObj) return false;
-
-    // Destructuring object from SessionStorage
-    urlStorageObj.url = getUrl();
-    urlList = urlStorageObj.urlList;
-
-    // Does the page exist by checking includes
-    urlObj = urlList.find(urlObj => !!(urlObj.url.includes(getUrl()) || getUrl().includes(urlObj.url)));
-
-    // Has existed in Session Storage
-    if(urlObj){
-        // Absolutely Equivalent
-        if(urlObj.urlRefs.find(url => url === getUrl()) === undefined){
-            urlObj.urlRefs.push(getUrl());
-        }
-
-        // Get new domain (comparing with refs)
-        urlObj.url = getDomain(urlObj.url, urlObj.urlRefs);
-
-        // Replace new URL (with the exact URL)
-        urlStorageObj.urlList = replaceUrlWithNewUrl(urlObj.url, urlStorageObj.urlList);
-
-        // find Index to re-assign for total time before exiting
-        index = urlList.findIndex(urlObj => !!(urlObj.url.includes(getUrl()) || getUrl().includes(urlObj.url)));
-    }else{
-        // create the new one
-        index = urlList.length;
-        urlObj = {
-            url: getUrl(),
-            urlRefs: [getUrl()],
-            totalTime: 0,
-        };
-        urlStorageObj.urlList.push(urlObj);
-    }
-    return true;
-};
+// const isLastAccessPage = () => {
+//     urlStorageObj = Pia.get('FEDebugData');
+//     if(!urlStorageObj) return false;
+//
+//     // Destructuring object from SessionStorage
+//     urlStorageObj.url = getUrl();
+//     urlList = urlStorageObj.urlList;
+//
+//     // Does the page exist by checking includes
+//     urlObj = urlList.find(urlObj => !!(urlObj.url.includes(getUrl()) || getUrl().includes(urlObj.url)));
+//
+//     // Has existed in Session Storage
+//     if(urlObj){
+//         // Absolutely Equivalent
+//         if(urlObj.urlRefs.find(url => url === getUrl()) === undefined){
+//             urlObj.urlRefs.push(getUrl());
+//         }
+//
+//         // Get new domain (comparing with refs)
+//         urlObj.url = getDomain(urlObj.url, urlObj.urlRefs);
+//
+//         // Replace new URL (with the exact URL)
+//         urlStorageObj.urlList = replaceUrlWithNewUrl(urlObj.url, urlStorageObj.urlList);
+//
+//         // find Index to re-assign for total time before exiting
+//         index = urlList.findIndex(urlObj => !!(urlObj.url.includes(getUrl()) || getUrl().includes(urlObj.url)));
+//     }else{
+//         // create the new one
+//         index = urlList.length;
+//         urlObj = {
+//             url: getUrl(),
+//             urlRefs: [getUrl()],
+//             totalTime: 0,
+//         };
+//         urlStorageObj.urlList.push(urlObj);
+//     }
+//     return true;
+// };
 
 
 /**
  * Check if the page had accessed before and re-assigned currentTime variable
  */
-const checkLastAccessPage = () => {
-    if(isLastAccessPage()){
-        currentTime = Date.now() - urlObj.totalTime;
-        lastAccess = true;
-        return;
-    }
-    urlObj = {
-        url: getUrl(),
-        urlRefs: [getUrl()],
-        totalTime: 0
-    };
-    urlStorageObj = {
-        url: getUrl(),
-        urlList: [urlObj],
-    };
-};
+// const checkLastAccessPage = () => {
+//     if(isLastAccessPage()){
+//         currentTime = Date.now() - urlObj.totalTime;
+//         lastAccess = true;
+//         return;
+//     }
+//     urlObj = {
+//         url: getUrl(),
+//         urlRefs: [getUrl()],
+//         totalTime: 0
+//     };
+//     urlStorageObj = {
+//         url: getUrl(),
+//         urlList: [urlObj],
+//     };
+// };
 
 
 /**
  * Replace URL Array
  * @returns array
  */
-const replaceUrlWithNewUrl = (url, urlList) => {
-    const results = [{
-        url,
-        urlRefs: []
-    }];
-    let isReplace = false;
-    let maxTime = 0;
-
-    for(let i = 0; i < urlList.length; i++){
-        const currentObj = urlList[i];
-        if(!currentObj.url.includes(url)){
-            results.push(currentObj);
-            continue;
-        }
-        results[0].urlRefs = [...results[0].urlRefs, ...currentObj.urlRefs];
-        maxTime = currentObj.totalTime > maxTime ? currentObj.totalTime : maxTime;
-        isReplace = true;
-    }
-
-    if(!isReplace) return results.splice(1);
-    results[0].totalTime = maxTime;
-    return results;
-};
+// const replaceUrlWithNewUrl = (url, urlList) => {
+//     const results = [{
+//         url,
+//         urlRefs: []
+//     }];
+//     let isReplace = false;
+//     let maxTime = 0;
+//
+//     for(let i = 0; i < urlList.length; i++){
+//         const currentObj = urlList[i];
+//         if(!currentObj.url.includes(url)){
+//             results.push(currentObj);
+//             continue;
+//         }
+//         results[0].urlRefs = [...results[0].urlRefs, ...currentObj.urlRefs];
+//         maxTime = currentObj.totalTime > maxTime ? currentObj.totalTime : maxTime;
+//         isReplace = true;
+//     }
+//
+//     if(!isReplace) return results.splice(1);
+//     results[0].totalTime = maxTime;
+//     return results;
+// };
 
 
 /**
  * Check if the page had accessed before and re-assigned currentTime variable
  */
-const handlePageExit = () => {
-    urlStorageObj.urlList[index].totalTime = Date.now() - currentTime;
-    Pia.set('FEDebugData', urlStorageObj, {expires: 'session'});
-};
-window.addEventListener('load', checkLastAccessPage);
-window.addEventListener('beforeunload', handlePageExit);
+// const handlePageExit = () => {
+//     urlStorageObj.urlList[index].totalTime = Date.now() - currentTime;
+//     Pia.set('FEDebugData', urlStorageObj, {expires: 'session'});
+// };
+// window.addEventListener('load', checkLastAccessPage);
+// window.addEventListener('beforeunload', handlePageExit);
 
 
 /**
@@ -143,14 +143,14 @@ export const getRealTime = (currentDate, previousDate = realTime) => {
  * Get URL string
  * @returns string
  */
-const getUrl = () => {
-    const url = new URL(location.href);
-    if(url.pathname === '/') return url.origin;
-
-    const newUrl = url.origin + url.pathname;
-    if(newUrl.slice(-1) === '/') return newUrl;
-    return newUrl + '/';
-};
+// const getUrl = () => {
+//     const url = new URL(location.href);
+//     if(url.pathname === '/') return url.origin;
+//
+//     const newUrl = url.origin + url.pathname;
+//     if(newUrl.slice(-1) === '/') return newUrl;
+//     return newUrl + '/';
+// };
 
 
 /**
@@ -239,12 +239,12 @@ const getDiffDomainFromURL = (urlArray) => {
  * @param referenceUrls
  * @returns string
  */
-const getDomain = (url, referenceUrls = []) => {
-    if(!url) return '';
-    if(referenceUrls.length === 0) return url;
-
-    const hasExist = referenceUrls.find(urlArr => urlArr.includes(url));
-    if(hasExist === undefined) return url;
-
-    return getDiffDomainFromURL([url, ...referenceUrls])[0];
-};
+// const getDomain = (url, referenceUrls = []) => {
+//     if(!url) return '';
+//     if(referenceUrls.length === 0) return url;
+//
+//     const hasExist = referenceUrls.find(urlArr => urlArr.includes(url));
+//     if(hasExist === undefined) return url;
+//
+//     return getDiffDomainFromURL([url, ...referenceUrls])[0];
+// };

@@ -1,4 +1,4 @@
-import {getDiffTime, getRealTime} from "./upTime";
+import {getRealTime} from "./upTime";
 
 export function initTiming(context){
     context.addRecord({
@@ -11,12 +11,12 @@ export function initTiming(context){
         highlight: false
     });
 
-    context.addRecord({
-        slug: 'time',
-        label: 'Uptime: [value]',
-        ref: {'uptime': () => `${getDiffTime(Date.now())}`},
-        value: `{uptime}`,
-        on: ['raf'],
-        highlight: false
-    });
+    // context.addRecord({
+    //     slug: 'time',
+    //     label: 'Uptime: [value]',
+    //     ref: {'uptime': () => `${getDiffTime(Date.now())}`},
+    //     value: `{uptime}`,
+    //     on: ['raf'],
+    //     highlight: false
+    // });
 }
