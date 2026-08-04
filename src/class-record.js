@@ -39,6 +39,9 @@ export class Record{
             }
 
             this.node = itemEl;
+        }else{
+            // reuse existing node
+            this.node = stats[0];
         }
 
 
@@ -52,6 +55,8 @@ export class Record{
      * Update stats of each value when frame reset
      */
     updateStats({type}){
+        if(!this.node) return;
+
         let newValue = this.getValue();
 
         // raf only run when value changed
