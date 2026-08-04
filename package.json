@@ -53,5 +53,8 @@
   },
   "dependencies": {
     "@phucbm/os-util": "^0.0.5"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.7"
   }
 }
