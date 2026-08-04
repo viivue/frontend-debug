@@ -32,6 +32,7 @@ export function initScroll(context){
     let maxSpeed = 0;
     let lastSpeed = 0;
     let averageSpeed = 0;
+    let previousScrollTop = scroll().top;
 
     let lastSpeedCount = 0;
     let lastSpeedTotal = 0;
@@ -55,7 +56,9 @@ export function initScroll(context){
         label: 'Speed: [value]',
         ref: {
             'speed': () => {
-                lastSpeed = Math.abs(context.lastScrollPosition - scroll().top);
+                const currentScrollTop = scroll().top;
+                lastSpeed = Math.abs(previousScrollTop - currentScrollTop);
+                previousScrollTop = currentScrollTop;
 
                 // for avg. speed
                 lastSpeedCount++;
