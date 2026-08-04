@@ -1,5 +1,3 @@
-// import 'piajs';
-
 let currentTime = Date.now();
 let urlObj = {},
     urlList = [],

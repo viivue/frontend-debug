@@ -1,6 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const {merge} = require('webpack-merge');
+const {mergeWithRules} = require('webpack-merge');
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -14,7 +14,14 @@ const path = require("path");
 const entryFolder = env.ENTRY || 'web';
 const entryPath = path.resolve(__dirname, `../${entryFolder}`);
 
-module.exports = merge(server, {
+module.exports = mergeWithRules({
+    module: {
+        rules: {
+            test: 'match',
+            use: 'replace',
+        },
+    },
+})(server, {
     mode: 'production',
     devtool: false,
 
