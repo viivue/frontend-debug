@@ -8,7 +8,7 @@
   "homepage": "https://github.com/viivue/frontend-debug",
   "repository": {
     "type": "git",
-    "url": "git@github.com:viivue/frontend-debug"
+    "url": "git+ssh://git@github.com/viivue/frontend-debug.git"
   },
   "author": {
     "name": "ViiVue",
